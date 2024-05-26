@@ -23,4 +23,14 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-Prototip: https://www.figma.com/proto/oihTuPyoglhteYa1I1P10u/run!?node-id=17-804&starting-point-node-id=17%3A804&t=sQhPesBKPXJrfwwP-1  
+
+
+- Naziv aplikacije: run!
+- Sastav tima: Ivana Pleše
+- Fakultet informatike u Puli (https://fipu.unipu.hr/)
+- Kolegij: Programsko inženjerstvo (ntankovic.unipu.hr/pi) 
+- Mentor: doc. dr. sc. Nikola Tanković (link na ntankovic.unipu.hr)
+
+- Aplikacija run! objediniti će sve potrebne informacije amaterskim ili profesionalnim trkaćima. Na glavnom zaslonu prikazati će se kartice podijeljene u tri teme/razine: maraton, polumaraton i trail staza. Korisnik bi dakle mogao pregledati aktualne odnosno od strane administratora objavljene trkaće rute u Hrvatskoj. Ukoliko nema pojedine stavke postojao bi ispis da trenutno nema nadolazeće trke. U naslovu kartice pisalo bi gdje se održava pojedina trka te odabirom te lokacije otvaraju se dodatne info: datum i vrijeme, cijena-ako postoji, težina itd. Na vrhu zaslona nalazit će se opcije za login i sign up. Tek kada korisnik napravi svoj profil, otvorit će mu se i opcija favorites gdje će moći dodati trke koje mu se sviđaju. 
+- Link na javni prototip: (https://www.figma.com/proto/oihTuPyoglhteYa1I1P10u/run!?node-id=17-804&starting-point-node-id=17%3A804&t=sQhPesBKPXJrfwwP-1)
+
