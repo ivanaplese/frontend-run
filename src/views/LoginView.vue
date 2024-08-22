@@ -5,7 +5,7 @@
         <div class="welcome-section p-5 d-none d-md-block">
           <h1>Login to <span class="brand">run!</span></h1>
           <p>If you don’t have an account</p>
-          <p>You can <a href="#" class="signup-link">Sign up here!</a></p>
+          <p>You can <a href="/signup" class="signup-link">Sign up here!</a></p>
         </div>
         <div class="login-form-section p-5">
           <h3 class="text-center mb-4">Login</h3>
