@@ -2,11 +2,9 @@
   <div id="app">
     <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <!-- Naziv aplikacije -->
         <router-link to="/" class="navbar-brand text-orange">run!</router-link>
 
-       <!-- Hamburger gumb za mobilne uređaje -->
-       <button
+        <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
@@ -17,7 +15,6 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Linkovi unutar collapse komponente -->
         <div class="collapse navbar-collapse" id="navbarNav">
           <div class="mx-auto">
             <ul class="navbar-nav">
@@ -49,9 +46,7 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
   color: #2c3e50;
-  
 }
 
 #nav {
@@ -60,15 +55,14 @@
 
   a {
     font-weight: bold;
-    
 
     &.router-link-exact-active {
-      color: orange;
+      color: #42b983;
     }
   }
 
   .text-orange {
-    color: #f58634 !important; /* Narančasta boja za naziv aplikacije */
+    color: #f58634 !important;
     font-size: 1.5rem;
     font-weight: bold;
   }

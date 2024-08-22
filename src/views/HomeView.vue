@@ -1,5 +1,6 @@
+
 <template>
- <div class="container">
+  <div class="container">
     <div v-if="marathons.length" class="row mb-4">
       <h4 class="mb-3">Marathons</h4>
       <div
@@ -8,12 +9,15 @@
         class="col-md-4">
         <div class="card">
           <img :src="marathon.image" class="card-img-top" alt="Race image" />
-          <div class="card-body"> 
+          <div class="card-body">
             <h5 class="card-title">
               <a href="#" @click.prevent="showDetails(marathon)">{{
                 marathon.name
               }}</a>
             </h5>
+            <p class="card-text">
+              {{ marathon.type }} - {{ marathon.location }}
+            </p>
             <p class="card-text">
               <small class="text-muted">{{ marathon.date }}</small>
             </p>
@@ -56,7 +60,6 @@
         <div class="card">
           <img :src="trail.image" class="card-img-top" alt="Race image" />
           <div class="card-body">
-            <!-- <h5 class="card-title">{{ trail.name }}</h5> -->
             <h5 class="card-title">
               <a href="#" @click.prevent="showDetails(trail)">{{
                 trail.name
@@ -76,7 +79,6 @@
       <p class="text-center mt-5">Trenutno nema utrka.</p>
     </div>
 
-    
     <div
       v-if="selectedRace"
       class="modal"
@@ -109,14 +111,11 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import runImage from "@/assets/run.jpeg";
-
 
 export default {
   name: "HomeView",
@@ -131,7 +130,7 @@ export default {
           date: "2024-09-15",
           image: runImage,
           description:
-          "The Zagreb Marathon is one of the most popular marathons in Croatia, taking you through the heart of the city.",
+            "The Zagreb Marathon is one of the most popular marathons in Croatia, taking you through the heart of the city.",
         },
         {
           id: 2,
@@ -141,7 +140,7 @@ export default {
           date: "2024-10-10",
           image: runImage,
           description:
-          "Dubrovnik Half Marathon offers a scenic route along the historic city walls and the Adriatic coast.",
+            "Dubrovnik Half Marathon offers a scenic route along the historic city walls and the Adriatic coast.",
         },
         {
           id: 3,
@@ -151,7 +150,7 @@ export default {
           date: "2024-11-20",
           image: runImage,
           description:
-          "The Istria Trail offers rugged terrain and beautiful landscapes, perfect for trail running enthusiasts.",
+            "The Istria Trail offers rugged terrain and beautiful landscapes, perfect for trail running enthusiasts.",
         },
         {
           id: 4,
@@ -171,7 +170,7 @@ export default {
           date: "2024-05-20",
           image: runImage,
           description:
-          "Slavonia Trail offers a unique opportunity to explore the beautiful plains of Eastern Croatia.",
+            "Slavonia Trail offers a unique opportunity to explore the beautiful plains of Eastern Croatia.",
         },
         {
           id: 6,
@@ -181,13 +180,10 @@ export default {
           date: "2024-04-20",
           image: runImage,
           description:
-          "The CCC Trail is part of the UTMB series, challenging runners with its tough alpine terrain.",
+            "The CCC Trail is part of the UTMB series, challenging runners with its tough alpine terrain.",
         },
       ],
-
-      selectedRace: null, // za podatke o odabranoj utrci
-
-
+      selectedRace: null, // Drži podatke o odabranoj utrci
     };
   },
   computed: {
@@ -210,26 +206,29 @@ export default {
 </script>
 
 <style scoped>
-
 .card {
   height: 100%;
 }
+
 .card-img-top {
   height: 180px;
   object-fit: cover;
 }
+
 .card-title {
   font-size: 1.25rem;
   font-weight: bold;
 }
+
 .text-center {
   font-size: 1.5rem;
   font-weight: bold;
- 
 }
+
 .mt-5 {
   margin-top: 3rem;
 }
+
 h4 {
   font-weight: bold;
   text-transform: uppercase;
@@ -247,26 +246,30 @@ h4 {
   align-items: center;
   justify-content: center;
 }
+
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 5px;
 }
+
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .modal-title {
   font-size: 1.5rem;
   font-weight: bold;
 }
+
 .modal-body {
   font-size: 1rem;
 }
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;
 }
-
 </style>
