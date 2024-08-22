@@ -5,12 +5,31 @@
         <!-- Naziv aplikacije -->
         <router-link to="/" class="navbar-brand text-orange">run!</router-link>
 
-        <!-- Linkovi -->
-        <div class="collapse navbar-collapse justify-content-end">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <router-link to="/" class="nav-link">Home</router-link>
-            </li>
+       <!-- Hamburger gumb za mobilne uređaje -->
+       <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Linkovi unutar collapse komponente -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <div class="mx-auto">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <router-link to="/" class="nav-link">Home</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/about" class="nav-link">About</router-link>
+              </li>
+            </ul>
+          </div>
+          <ul class="navbar-nav ms-auto">
             <li class="nav-item">
               <router-link to="/login" class="nav-link">Login</router-link>
             </li>
@@ -37,6 +56,7 @@
 
 #nav {
   padding: 10px;
+  background-color: white !important;
 
   a {
     font-weight: bold;
