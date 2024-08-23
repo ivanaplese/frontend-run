@@ -12,6 +12,7 @@
               class="form-control"
               id="inputFirstName"
               placeholder="Enter your first name"
+                v-model="firstName"
               required />
           </div>
           <div class="col-md-6 mb-3">
@@ -21,6 +22,7 @@
               class="form-control"
               id="inputLastName"
               placeholder="Enter your last name"
+               v-model="lastName"
               required />
           </div>
         </div>
@@ -30,6 +32,7 @@
             type="date"
             class="form-control"
             id="inputBirthDate"
+             v-model="birthDate"
             required />
         </div>
         <div class="mb-3">
@@ -39,6 +42,7 @@
             class="form-control"
             id="inputUsername"
             placeholder="Enter your username"
+            v-model="userName"
             required />
         </div>
         <div class="mb-3">
@@ -48,6 +52,7 @@
             class="form-control"
             id="inputEmail"
             placeholder="Enter your email"
+            v-model="email"
             required />
         </div>
         <div class="row">
@@ -58,6 +63,7 @@
               class="form-control"
               id="inputPassword"
               placeholder="Enter your password"
+              v-model="password"
               required />
           </div>
           <div class="col-md-6 mb-3">
@@ -69,10 +75,14 @@
               class="form-control"
               id="inputConfirmPassword"
               placeholder="Confirm your password"
+               v-model="passwordRepeat"
               required />
           </div>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+        <!-- <button type="submit" class="btn btn-primary w-100">Sign Up</button> -->
+        <button type="button" @click="signup" class="btn btn-primary w-100">
+          Sign Up
+        </button>
       </form>
       <div class="text-center mt-3">
         <p>
@@ -85,9 +95,44 @@
 </template>
 
 <script>
+
+import { auth } from "@/firebase.js";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+
+
 export default {
   name: "SignupView",
+
+  data() {
+    return {
+      firstName: "",
+      lastName: "",
+      birthDate: "",
+      useName: "",
+      email: "",
+      password: "",
+      passwordRepeat: "",
+    };
+  },
+  methods: {
+    signup() {
+      createUserWithEmailAndPassword(auth, this.email, this.password)
+        .then(() => {
+          alert("Uspješna registracija. ");
+        })
+        .catch((error) => {
+          if (this.password.length < 6) {
+            alert("Lozinka mora imati najmanje 6 znakova.");
+            return;
+          }
+          console.error("Došlo je do greške", error);
+        });
+      console.log("Nastavak...");
+    },
+  },
+  
 };
+
 </script>
 
 <style scoped>
