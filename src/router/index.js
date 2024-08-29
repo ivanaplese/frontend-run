@@ -9,6 +9,7 @@ import LoginView from "../views/LoginView.vue";
 import SignupView from "../views/SignupView.vue";
 import store from "@/store";
 import UserSettings from "@/views/SettingsView.vue";
+import UserProfile from "@/views/UserProfile.vue";
 
 const routes = [
     {
@@ -45,6 +46,12 @@ const routes = [
         path: "/settings",
         name: "user-settings",
         component: UserSettings,
+        meta: { needsUser: true },
+    },
+    {
+        path: "/profile",
+        name: "user-profile",
+        component: UserProfile,
         meta: { needsUser: true },
     },
 ];

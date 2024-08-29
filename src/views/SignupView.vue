@@ -98,7 +98,12 @@
 
 import { auth } from "@/firebase.js";
 // import { createUserWithEmailAndPassword } from "firebase/auth";
-import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+// import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
 
 export default {
   name: "SignupView",
@@ -123,6 +128,11 @@ export default {
       }
       // Kreiranje korisničkog naloga
       createUserWithEmailAndPassword(auth, this.email, this.password)
+      .then((userCredential) => {
+          return updateProfile(userCredential.user, {
+            displayName: `${this.firstName} ${this.lastName}`,
+          });
+        })
         .then(() => {
           alert("Uspješna registracija. Molimo, prijavite se.");
       // Odjavljivanje korisnika nakon registracije
@@ -134,9 +144,11 @@ export default {
           this.$router.push("/login");
         })
         .catch((error) => {
+          console.error("Došlo je do greške", error);
           if (this.password.length < 6) {
             alert("Lozinka mora imati najmanje 6 znakova.");
-            return;
+          } else {
+            alert("Registracija nije uspjela. Pokušajte ponovo.");
           }
           console.error("Došlo je do greške", error);
         });
