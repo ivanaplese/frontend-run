@@ -1,6 +1,29 @@
 
 <template>
   <div class="container">
+    <form @submit.prevent="postNewRace" class="form-inline mb-5">
+      <div class="form-group">
+        <label for="name">Race Name:</label>
+        <input type="text" id="name" v-model="newRaceName" required />
+      </div>
+      <div>
+        <label for="type">Race Type:</label>
+        <input type="text" id="type" v-model="newRaceType" required />
+      </div>
+      <div>
+        <label for="date">Date:</label>
+        <input type="date" id="date" v-model="newRaceDate" required />
+      </div>
+      <div>
+        <label for="location">Location:</label>
+        <input type="text" id="location" v-model="newRaceLocation" required />
+      </div>
+      <div>
+        <label for="description">Description:</label>
+        <textarea id="description" v-model="newRaceDescription"></textarea>
+      </div>
+      <button type="submit">Add New Race</button>
+    </form>
     <div v-if="marathons.length" class="row mb-4">
       <h4 class="mb-3">Marathons</h4>
       <div
@@ -56,6 +79,7 @@
 
     <div v-if="trails.length" class="row mb-4">
       <h4 class="mb-3">Trails</h4>
+
       <div v-for="trail in trails.slice(0, 6)" :key="trail.id" class="col-md-4">
         <div class="card">
           <img :src="trail.image" class="card-img-top" alt="Race image" />
@@ -116,11 +140,18 @@
 
 <script>
 import runImage from "@/assets/run.jpeg";
+import { db } from "@/firebase.js";
+import store from "@/store";
 
 export default {
   name: "HomeView",
   data() {
     return {
+      newRaceName: "",
+      newRaceType: "",
+      newRaceDate: "",
+      newRaceLocation: "",
+      newRaceDescription: "",
       races: [
         {
           id: 1,
@@ -183,7 +214,7 @@ export default {
             "The CCC Trail is part of the UTMB series, challenging runners with its tough alpine terrain.",
         },
       ],
-      selectedRace: null, // Drži podatke o odabranoj utrci
+      selectedRace: null,
     };
   },
   computed: {
@@ -200,6 +231,29 @@ export default {
   methods: {
     showDetails(race) {
       this.selectedRace = race;
+    },
+    postNewRace() {
+      const newRace = {
+        name: this.newRaceName,
+        type: this.newRaceType,
+        date: this.newRaceDate,
+        location: this.newRaceLocation,
+        description: this.newRaceDescription,
+        email: store.currentUser.email,
+      };
+      db.collection("races")
+        .add(newRace)
+        .then(() => {
+          console.log("Race successfully added!");
+          this.newRaceName = "";
+          this.newRaceType = "";
+          this.newRaceDate = "";
+          this.newRaceLocation = "";
+          this.newRaceDescription = "";
+        })
+        .catch((error) => {
+          console.error("Error adding race: ", error);
+        });
     },
   },
 };

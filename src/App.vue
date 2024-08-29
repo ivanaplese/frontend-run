@@ -86,7 +86,7 @@ export default {
     logout() {
       signOut(auth)
         .then(() => {
-          console.log("Korisnik je uspešno odjavljen.");
+          console.log("Korisnik je uspješno odjavljen.");
           store.currentUser = null;
           this.$router.push("/login");
         })
