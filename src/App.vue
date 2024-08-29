@@ -27,11 +27,16 @@
             </ul>
           </div>
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
+            <li class="nav-item" v-if="!currentUser">
               <router-link to="/login" class="nav-link">Login</router-link>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="!currentUser">
               <router-link to="/signup" class="nav-link">Signup</router-link>
+            </li>
+            <li class="nav-item" v-if="currentUser">
+              <button @click="logout" class="nav-link btn btn-link">
+                Logout
+              </button>
             </li>
           </ul>
         </div>
@@ -40,6 +45,46 @@
     <router-view />
   </div>
 </template>
+
+<script>
+import { auth } from "@/firebase.js";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+export default {
+  name: "App",
+  data() {
+    return {
+      currentUser: null,
+    };
+  },
+  methods: {
+    logout() {
+      signOut(auth)
+        .then(() => {
+          console.log("Korisnik je uspešno odjavljen.");
+          this.currentUser = null;
+          this.$router.push("/login");
+        })
+        .catch((error) => {
+          console.error("Greška prilikom odjavljivanja:", error);
+        });
+    },
+  },
+  created() {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.currentUser = user.email;
+        console.log("*** User", user.email);
+      } else {
+        this.currentUser = null;
+        console.log("*** No user");
+        if (this.$route.name !== "login") {
+          this.$router.push({ name: "login" });
+        }
+      }
+    });
+  },
+};
+</script>
 
 <style lang="scss">
 #app {

@@ -1,30 +1,38 @@
 
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../views/HomeView.vue';
+// import Home from '../views/HomeView.vue';
+
+import HomeView from "../views/HomeView.vue";
+import AboutView from "../views/AboutView.vue";
+import LoginView from "../views/LoginView.vue";
+import SignupView from "../views/SignupView.vue"; // Pretpostavljam da postoji i SignupView
+
 
 const routes = [
     {
         path: '/',
         name: 'Home',
-        component: Home,
-    },
-    {
-        path: '/login',
-        name: 'Login',
-        component: () =>
-            import(/* webpackChunkName: "login" */ '../views/LoginView.vue'),
-    },
-    {
-        path: '/signup',
-        name: 'Signup',
-        component: () =>
-            import(/* webpackChunkName: "login" */ '../views/SignupView.vue'),
+        name: "home",
+        component: HomeView,
     },
     {
         path: "/about",
-        name: "About",
-        component: () =>
-            import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+        name: "about",
+        component: AboutView,
+    },
+    {
+        path: '/login',
+        name: "login",
+        component: LoginView,
+    },
+    {
+        path: '/signup',
+        name: "signup",
+        component: SignupView,
+    },
+    {
+        path: "/:catchAll(.*)", // Fallback ruta
+        redirect: "/",
     },
 ];
 

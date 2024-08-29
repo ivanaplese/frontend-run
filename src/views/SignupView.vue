@@ -97,8 +97,8 @@
 <script>
 
 import { auth } from "@/firebase.js";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-
+// import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 
 export default {
   name: "SignupView",
@@ -108,7 +108,7 @@ export default {
       firstName: "",
       lastName: "",
       birthDate: "",
-      useName: "",
+      userName: "",
       email: "",
       password: "",
       passwordRepeat: "",
@@ -116,9 +116,22 @@ export default {
   },
   methods: {
     signup() {
+      // Provera da li se lozinke poklapaju
+      if (this.password !== this.passwordRepeat) {
+        alert("Lozinke se ne poklapaju!");
+        return;
+      }
+      // Kreiranje korisničkog naloga
       createUserWithEmailAndPassword(auth, this.email, this.password)
         .then(() => {
-          alert("Uspješna registracija. ");
+          alert("Uspješna registracija. Molimo, prijavite se.");
+      // Odjavljivanje korisnika nakon registracije
+      return signOut(auth);
+        })
+        .then(() => {
+
+          // Preusmeravanje korisnika na login stranicu
+          this.$router.push("/login");
         })
         .catch((error) => {
           if (this.password.length < 6) {
@@ -127,7 +140,7 @@ export default {
           }
           console.error("Došlo je do greške", error);
         });
-      console.log("Nastavak...");
+     
     },
   },
   

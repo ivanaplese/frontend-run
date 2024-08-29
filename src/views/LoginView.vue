@@ -5,7 +5,13 @@
       <div class="welcome-section p-5 d-none d-md-block">
         <h1>Login to <span class="brand">run!</span></h1>
         <p>If you don’t have an account</p>
-        <p>You can <a href="/signup" class="signup-link">Sign up here!</a></p>
+               <!-- Izmenjen tag a u router-link -->
+               <p>
+          You can
+          <router-link to="/signup" class="signup-link"
+            >Sign up here!</router-link
+          >
+        </p>
       </div>
       <div class="login-form-section p-5">
         <h3 class="text-center mb-4">Login</h3>
@@ -13,6 +19,7 @@
           <div class="mb-3">
             <input
               type="email"
+              v-model="email"
               class="form-control custom-input"
               id="email"
               placeholder="Enter email" />
@@ -20,6 +27,7 @@
           <div class="mb-4 position-relative">
             <input
               type="password"
+               v-model="password"
               class="form-control custom-input"
               id="password"
               placeholder="Password" />
@@ -27,7 +35,10 @@
               ><i class="bi bi-eye"></i
             ></span>
           </div>
-          <button type="submit" class="btn btn-primary custom-btn w-100">
+          <button
+            type="button"
+            @click="login()"
+            class="btn btn-primary custom-btn w-100">
             Login
           </button>
         </form>
@@ -35,6 +46,36 @@
     </div>
   </div>
 </template>
+
+<script>
+import { auth } from "@/firebase.js";
+import { signInWithEmailAndPassword } from "firebase/auth";
+export default {
+  name: "login",
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    login() {
+      console.log("Login..." + this.email);
+      signInWithEmailAndPassword(auth, this.email, this.password)
+        .then((result) => {
+          console.log("Uspješna prijava.", result);
+          this.$router.push("/");
+        })
+        .catch((e) => {
+          console.error("Greška!", e);
+          alert(
+            "Došlo je do greške prilikom prijave. Molimo pokušajte ponovo."
+          );
+        });
+    },
+  },
+};
+</script>
 
 <style scoped>
 .login-container {
