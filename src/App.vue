@@ -49,6 +49,7 @@
 <script>
 import { auth } from "@/firebase.js";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import store from "@/store"; // import store
 export default {
   name: "App",
   data() {

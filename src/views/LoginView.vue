@@ -5,7 +5,7 @@
       <div class="welcome-section p-5 d-none d-md-block">
         <h1>Login to <span class="brand">run!</span></h1>
         <p>If you don’t have an account</p>
-               <!-- Izmenjen tag a u router-link -->
+
                <p>
           You can
           <router-link to="/signup" class="signup-link"
