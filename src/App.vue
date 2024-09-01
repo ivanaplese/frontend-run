@@ -40,11 +40,11 @@
               <ul
                 class="dropdown-menu dropdown-menu-end"
                 aria-labelledby="userDropdown">
-                <li>
+                <!-- <li>
                   <router-link to="/settings" class="dropdown-item"
                     >Postavke</router-link
                   >
-                </li>
+                <!-- </li> -->
                 <li>
                   <router-link to="/profile" class="dropdown-item"
                     >Profil</router-link
