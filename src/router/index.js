@@ -37,10 +37,6 @@ const routes = [
         component: SignupView,
         meta: { guestOnly: true },
     },
-    {
-        path: "/:catchAll(.*)",
-        redirect: "/",
-    },
     // {
     //     path: "/settings",
     //     name: "user-settings",
@@ -53,6 +49,10 @@ const routes = [
         component: UserProfile,
         meta: { needsUser: true },
     },
+    {
+        path: "/:catchAll(.*)",
+        redirect: "/",
+    }
 ];
 
 const router = createRouter({
@@ -61,21 +61,13 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    console.log(
-        "Bio sam na",
-        from.name,
-        "idem na",
-        to.name,
-        "a korisnik je",
-        store.currentUser
-    );
 
     const isLoggedIn = store.currentUser !== null;
 
-    if (!isLoggedIn && to.meta.needsUser) {
-        next({ name: "login" });
-    } else if (isLoggedIn && to.meta.guestOnly) {
+    if (isLoggedIn && to.meta.guestOnly) {
         next({ name: "home" });
+    } else if (!isLoggedIn && to.meta.needsUser) {
+        next({ name: "login" });
     } else {
         next();
     }
