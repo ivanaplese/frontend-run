@@ -272,54 +272,40 @@ export default {
     },
 
     postNewRace() {
-      const newRace = {
+      const racesCollection = collection(db, "races");
+      addDoc(racesCollection, {
         name: this.newRaceName,
-        type: this.newRaceType,
         date: this.newRaceDate,
         location: this.newRaceLocation,
+        type: this.newRaceType,
         description: this.newRaceDescription,
-        email: store.currentUser.email,
-      };
-      db.collection("races")
-        .add(newRace)
-        .then(() => {
-          console.log("Race successfully added!");
+
+      })
+        .then((docRef) => {
+          console.log("Document written with ID: ", docRef.id);
+
           this.newRaceName = "";
           this.newRaceType = "";
           this.newRaceDate = "";
           this.newRaceLocation = "";
           this.newRaceDescription = "";
+
+ // Ponovno dohvaćanje svih utrka nakon dodavanja nove
+          this.getPosts();
+
         })
         .catch((error) => {
-          console.error("Error adding race: ", error);
+          console.error("Error adding document: ", error);
         });
     },
-    async postNewRace() {
-      try {
-        // Prvo da dobijem tu kolekciju
-        const racesCollection = collection(db, "races");
-        // Dodavanje nove utrke
-        const docRef = await addDoc(racesCollection, {
-          name: this.newRaceName,
-          date: this.newRaceDate,
-          location: this.newRaceLocation,
-          type: this.newRaceType,
-          description: this.newRaceDescription,
-        });
-        console.log("Document written with ID: ", docRef.id);
-        
-        this.newRaceName = "";
-        this.newRaceType = "";
-        this.newRaceDate = "";
-        this.newRaceLocation = "";
-        this.newRaceDescription = "";
+  
 
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-    },
   },
 };
+
+
+
+
 </script>
 <style scoped>
 .card {
