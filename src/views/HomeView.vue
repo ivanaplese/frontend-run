@@ -57,7 +57,6 @@
 
     <div v-if="trails.length" class="row mb-4">
       <h4 class="mb-3">Trails</h4>
-
       <div v-for="trail in trails.slice(0, 6)" :key="trail.id" class="col-md-4">
         <div class="card">
           <img :src="trail.image" class="card-img-top" alt="Race image" />
@@ -117,23 +116,15 @@
 </template>
 
 <script>
-import runImage from "@/assets/run.jpeg";
-import { db, collection, addDoc } from "@/firebase.js";
-import store from "@/store";
+import { db, collection, getDocs } from "@/firebase.js";
 
 
 export default {
   name: "HomeView",
   data() {
     return {
-      newRaceName: "",
-      newRaceType: "",
-      newRaceDate: "",
-      newRaceLocation: "",
-      newRaceDescription: "",
- 
-      races: [],
-      selectedRace: null,
+     races: [],
+    selectedRace: null,
     };
   },
   computed: {
@@ -149,10 +140,8 @@ export default {
   },
 
   mounted() {
-    // provjera dali mounted  radi
     console.log("MOUNTED.");
     this.getPosts();
-    // dohvat iz firebasea
   },
 
   methods: {
@@ -169,7 +158,7 @@ export default {
           querySnapshot.forEach((doc) => {
             const data = doc.data();
             this.races.push({
-              id: data.id,
+              id: doc.id,
               name: data.name,
               date: data.date,
               location: data.location,
@@ -182,36 +171,6 @@ export default {
           console.error("Error getting documents: ", error);
         });
     },
-
-    postNewRace() {
-      const racesCollection = collection(db, "races");
-      addDoc(racesCollection, {
-        name: this.newRaceName,
-        date: this.newRaceDate,
-        location: this.newRaceLocation,
-        type: this.newRaceType,
-        description: this.newRaceDescription,
-
-      })
-        .then((docRef) => {
-          console.log("Document written with ID: ", docRef.id);
-
-          this.newRaceName = "";
-          this.newRaceType = "";
-          this.newRaceDate = "";
-          this.newRaceLocation = "";
-          this.newRaceDescription = "";
-
- // Ponovno dohvaćanje svih utrka nakon dodavanja nove
-          this.getPosts();
-
-        })
-        .catch((error) => {
-          console.error("Error adding document: ", error);
-        });
-    },
-  
-
   },
 };
 

@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+      <h1>Add New Race</h1>
       <form @submit.prevent="postNewRace" class="form-inline mb-5">
         <div class="form-group">
           <label for="name">Race Name:</label>
@@ -7,7 +8,11 @@
         </div>
         <div>
           <label for="type">Race Type:</label>
-          <input type="text" id="type" v-model="newRaceType" required />
+          <select id="type" v-model="newRaceType" required>
+          <option value="Marathon">Marathon</option>
+          <option value="Half Marathon">Half Marathon</option>
+          <option value="Trail">Trail</option>
+        </select>
         </div>
         <div>
           <label for="date">Date:</label>
@@ -27,11 +32,10 @@
   </template>
   
   <script>
-  import runImage from "@/assets/run.jpeg";
-  import { db, collection, addDoc, getDocs } from "@/firebase.js";
-  import store from "@/store";
+  import { db, collection, addDoc } from "@/firebase.js";
+
   export default {
-    name: "HomeView",
+  name: "NewRace",
     data() {
       return {
         newRaceName: "",
@@ -41,56 +45,16 @@
         newRaceDescription: "",
       };
     },
-    computed: {
-      marathons() {
-        return this.races.filter((race) => race.type === "Marathon");
-      },
-      halfMarathons() {
-        return this.races.filter((race) => race.type === "Half Marathon");
-      },
-      trails() {
-        return this.races.filter((race) => race.type === "Trail");
-      },
-    },
-    mounted() {
-      // provjera dali mounted stvarno radi
-      console.log("MOUNTED.");
-      this.getPosts();
-      // dohvat iz firebasea
-    },
+
     methods: {
-      showDetails(race) {
-        this.selectedRace = race;
-      },
-      getPosts() {
-        console.log("Firebase dohvat...");
-        const racesCollection = collection(db, "races");
-        getDocs(racesCollection)
-          .then((querySnapshot) => {
-            this.races = [];
-            querySnapshot.forEach((doc) => {
-              const data = doc.data();
-              this.races.push({
-                id: data.id,
-                name: data.name,
-                date: data.date,
-                location: data.location,
-                description: data.description,
-                type: data.type,
-              });
-            });
-          })
-          .catch((error) => {
-            console.error("Error getting documents: ", error);
-          });
-      },
+     
       postNewRace() {
         const racesCollection = collection(db, "races");
         addDoc(racesCollection, {
           name: this.newRaceName,
+          type: this.newRaceType,
           date: this.newRaceDate,
           location: this.newRaceLocation,
-          type: this.newRaceType,
           description: this.newRaceDescription,
         })
           .then((docRef) => {
@@ -102,9 +66,15 @@
             this.newRaceDescription = "";
             // Ponovno dohvaćanje svih utrka nakon dodavanja nove
             this.getPosts();
+
+            alert("Utrka je uspješno dodana.");
+            this.$router.push({ name: "home" });
+
+
           })
           .catch((error) => {
             console.error("Error adding document: ", error);
+            alert("Greška:", error);
           });
       },
     },
@@ -112,59 +82,33 @@
   </script>
   
   <style scoped>
-  .card {
-    height: 100%;
+  
+  .form-inline {
+  display: flex;
+  flex-direction: column;
   }
-  .card-img-top {
-    height: 180px;
-    object-fit: cover;
-  }
-  .card-title {
-    font-size: 1.25rem;
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
     font-weight: bold;
+
   }
-  .text-center {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  .mt-5 {
-    margin-top: 3rem;
-  }
-  h4 {
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-  }
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-  }
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .modal-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  .modal-body {
-    font-size: 1rem;
-  }
-  .modal-footer {
-    display: flex;
-    justify-content: flex-end;
+  input[type="text"],
+input[type="date"],
+textarea {
+  padding: 8px;
+  box-sizing: border-box;
+   
+}
+button {
+  align-self: flex-start;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
   }
   </style>
