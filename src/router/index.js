@@ -5,11 +5,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from "../views/HomeView.vue";
 import AboutView from "../views/AboutView.vue";
 import LoginView from "../views/LoginView.vue";
-// import SignupView from "../views/SignupView.vue"; 
 import SignupView from "../views/SignupView.vue";
 import store from "@/store";
-// import UserSettings from "@/views/SettingsView.vue";
 import UserProfile from "@/views/UserProfile.vue";
+import NewRace from "@/views/NewRace.vue";
 
 const routes = [
     {
@@ -37,17 +36,16 @@ const routes = [
         component: SignupView,
         meta: { guestOnly: true },
     },
-    // {
-    //     path: "/settings",
-    //     name: "user-settings",
-    //     component: UserSettings,
-    //     meta: { needsUser: true },
-    // },
     {
         path: "/profile",
         name: "user-profile",
         component: UserProfile,
         meta: { needsUser: true },
+    },
+    {
+        path: "/newraces",
+        name: "new-races",
+        component: NewRace,
     },
     {
         path: "/:catchAll(.*)",

@@ -1,29 +1,7 @@
 
 <template>
   <div class="container">
-    <form @submit.prevent="postNewRace" class="form-inline mb-5">
-      <div class="form-group">
-        <label for="name">Race Name:</label>
-        <input type="text" id="name" v-model="newRaceName" required />
-      </div>
-      <div>
-        <label for="type">Race Type:</label>
-        <input type="text" id="type" v-model="newRaceType" required />
-      </div>
-      <div>
-        <label for="date">Date:</label>
-        <input type="date" id="date" v-model="newRaceDate" required />
-      </div>
-      <div>
-        <label for="location">Location:</label>
-        <input type="text" id="location" v-model="newRaceLocation" required />
-      </div>
-      <div>
-        <label for="description">Description:</label>
-        <textarea id="description" v-model="newRaceDescription"></textarea>
-      </div>
-      <button type="submit">Add New Race</button>
-    </form>
+ 
     <div v-if="marathons.length" class="row mb-4">
       <h4 class="mb-3">Marathons</h4>
       <div
@@ -142,72 +120,6 @@
 import runImage from "@/assets/run.jpeg";
 import { db, collection, addDoc } from "@/firebase.js";
 import store from "@/store";
-
-/*
-let races = [];
-races: [
-  {
-    id: 1,
-    name: "Zagreb Marathon",
-    type: "Marathon",
-    location: "Zagreb",
-    date: "2024-09-15",
-    image: runImage,
-    description:
-      "The Zagreb Marathon is one of the most popular marathons in Croatia, taking you through the heart of the city.",
-  },
-  {
-    id: 2,
-    name: "Dubrovnik Half Marathon",
-    type: "Half Marathon",
-    location: "Dubrovnik",
-    date: "2024-10-10",
-    image: runImage,
-    description:
-      "Dubrovnik Half Marathon offers a scenic route along the historic city walls and the Adriatic coast.",
-  },
-  {
-    id: 3,
-    name: "Istria Trail",
-    type: "Trail",
-    location: "Istria",
-    date: "2024-11-20",
-    image: runImage,
-    description:
-      "The Istria Trail offers rugged terrain and beautiful landscapes, perfect for trail running enthusiasts.",
-  },
-  {
-    id: 4,
-    name: "Dalmatia Trail",
-    type: "Trail",
-    location: "Dalmatia",
-    date: "2024-10-20",
-    image: runImage,
-    description:
-      "Dalmatia Trail takes you through the mountainous regions of Dalmatia, offering breathtaking views.",
-  },
-  {
-    id: 5,
-    name: "Slavonia Trail",
-    type: "Trail",
-    location: "Slavonia",
-    date: "2024-05-20",
-    image: runImage,
-    description:
-      "Slavonia Trail offers a unique opportunity to explore the beautiful plains of Eastern Croatia.",
-  },
-  {
-    id: 6,
-    name: "CCC Trail",
-    type: "Trail",
-    location: "Alpe",
-    date: "2024-04-20",
-    image: runImage,
-    description:
-      "The CCC Trail is part of the UTMB series, challenging runners with its tough alpine terrain.",
-  },
-];
-*/
 
 
 export default {

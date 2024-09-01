@@ -50,6 +50,11 @@
                     >Profil</router-link
                   >
                 </li>
+                <li>
+                  <router-link to="/newraces" class="dropdown-item"
+                    >Dodaj novu utrku</router-link
+                  >
+                </li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
                   <button @click="logout" class="dropdown-item">Logout</button>
