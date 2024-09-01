@@ -140,7 +140,7 @@
 
 <script>
 import runImage from "@/assets/run.jpeg";
-import { db } from "@/firebase.js";
+import { db, collection, addDoc } from "@/firebase.js";
 import store from "@/store";
 
 export default {
@@ -255,40 +255,50 @@ export default {
           console.error("Error adding race: ", error);
         });
     },
+    async postNewRace() {
+      try {
+        // Prvo da dobijem tu kolekciju
+        const racesCollection = collection(db, "races");
+        // Dodavanje nove utrke
+        const docRef = await addDoc(racesCollection, {
+          name: this.newRaceName,
+          date: this.newRaceDate,
+          location: this.newRaceLocation,
+          type: this.newRaceType,
+          description: this.newRaceDescription,
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    },
   },
 };
 </script>
-
 <style scoped>
 .card {
   height: 100%;
 }
-
 .card-img-top {
   height: 180px;
   object-fit: cover;
 }
-
 .card-title {
   font-size: 1.25rem;
   font-weight: bold;
 }
-
 .text-center {
   font-size: 1.5rem;
   font-weight: bold;
 }
-
 .mt-5 {
   margin-top: 3rem;
 }
-
 h4 {
   font-weight: bold;
   text-transform: uppercase;
   margin-bottom: 20px;
 }
-
 .modal {
   position: fixed;
   top: 0;
@@ -300,28 +310,23 @@ h4 {
   align-items: center;
   justify-content: center;
 }
-
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 5px;
 }
-
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
 .modal-title {
   font-size: 1.5rem;
   font-weight: bold;
 }
-
 .modal-body {
   font-size: 1rem;
 }
-
 .modal-footer {
   display: flex;
   justify-content: flex-end;
