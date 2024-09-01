@@ -7,8 +7,8 @@ import AboutView from "../views/AboutView.vue";
 import LoginView from "../views/LoginView.vue";
 import SignupView from "../views/SignupView.vue";
 import store from "@/store";
-import UserProfile from "@/views/UserProfile.vue";
-import NewRace from "@/views/NewRace.vue";
+import UserProfile from "@/views/UserProfileView.vue";
+import NewRace from "@/views/NewRaceView.vue";
 
 const routes = [
     {
