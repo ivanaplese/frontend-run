@@ -46,6 +46,7 @@ const routes = [
         path: "/newraces",
         name: "new-races",
         component: NewRace,
+        meta: { needsUser: true },
     },
     {
         path: "/:catchAll(.*)",
