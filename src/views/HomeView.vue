@@ -143,6 +143,73 @@ import runImage from "@/assets/run.jpeg";
 import { db, collection, addDoc } from "@/firebase.js";
 import store from "@/store";
 
+/*
+let races = [];
+races: [
+  {
+    id: 1,
+    name: "Zagreb Marathon",
+    type: "Marathon",
+    location: "Zagreb",
+    date: "2024-09-15",
+    image: runImage,
+    description:
+      "The Zagreb Marathon is one of the most popular marathons in Croatia, taking you through the heart of the city.",
+  },
+  {
+    id: 2,
+    name: "Dubrovnik Half Marathon",
+    type: "Half Marathon",
+    location: "Dubrovnik",
+    date: "2024-10-10",
+    image: runImage,
+    description:
+      "Dubrovnik Half Marathon offers a scenic route along the historic city walls and the Adriatic coast.",
+  },
+  {
+    id: 3,
+    name: "Istria Trail",
+    type: "Trail",
+    location: "Istria",
+    date: "2024-11-20",
+    image: runImage,
+    description:
+      "The Istria Trail offers rugged terrain and beautiful landscapes, perfect for trail running enthusiasts.",
+  },
+  {
+    id: 4,
+    name: "Dalmatia Trail",
+    type: "Trail",
+    location: "Dalmatia",
+    date: "2024-10-20",
+    image: runImage,
+    description:
+      "Dalmatia Trail takes you through the mountainous regions of Dalmatia, offering breathtaking views.",
+  },
+  {
+    id: 5,
+    name: "Slavonia Trail",
+    type: "Trail",
+    location: "Slavonia",
+    date: "2024-05-20",
+    image: runImage,
+    description:
+      "Slavonia Trail offers a unique opportunity to explore the beautiful plains of Eastern Croatia.",
+  },
+  {
+    id: 6,
+    name: "CCC Trail",
+    type: "Trail",
+    location: "Alpe",
+    date: "2024-04-20",
+    image: runImage,
+    description:
+      "The CCC Trail is part of the UTMB series, challenging runners with its tough alpine terrain.",
+  },
+];
+*/
+
+
 export default {
   name: "HomeView",
   data() {
@@ -152,68 +219,8 @@ export default {
       newRaceDate: "",
       newRaceLocation: "",
       newRaceDescription: "",
-      races: [
-        {
-          id: 1,
-          name: "Zagreb Marathon",
-          type: "Marathon",
-          location: "Zagreb",
-          date: "2024-09-15",
-          image: runImage,
-          description:
-            "The Zagreb Marathon is one of the most popular marathons in Croatia, taking you through the heart of the city.",
-        },
-        {
-          id: 2,
-          name: "Dubrovnik Half Marathon",
-          type: "Half Marathon",
-          location: "Dubrovnik",
-          date: "2024-10-10",
-          image: runImage,
-          description:
-            "Dubrovnik Half Marathon offers a scenic route along the historic city walls and the Adriatic coast.",
-        },
-        {
-          id: 3,
-          name: "Istria Trail",
-          type: "Trail",
-          location: "Istria",
-          date: "2024-11-20",
-          image: runImage,
-          description:
-            "The Istria Trail offers rugged terrain and beautiful landscapes, perfect for trail running enthusiasts.",
-        },
-        {
-          id: 4,
-          name: "Dalmatia Trail",
-          type: "Trail",
-          location: "Dalmatia",
-          date: "2024-10-20",
-          image: runImage,
-          description:
-            "Dalmatia Trail takes you through the mountainous regions of Dalmatia, offering breathtaking views.",
-        },
-        {
-          id: 5,
-          name: "Slavonia Trail",
-          type: "Trail",
-          location: "Slavonia",
-          date: "2024-05-20",
-          image: runImage,
-          description:
-            "Slavonia Trail offers a unique opportunity to explore the beautiful plains of Eastern Croatia.",
-        },
-        {
-          id: 6,
-          name: "CCC Trail",
-          type: "Trail",
-          location: "Alpe",
-          date: "2024-04-20",
-          image: runImage,
-          description:
-            "The CCC Trail is part of the UTMB series, challenging runners with its tough alpine terrain.",
-        },
-      ],
+ 
+      races: [],
       selectedRace: null,
     };
   },
@@ -228,10 +235,42 @@ export default {
       return this.races.filter((race) => race.type === "Trail");
     },
   },
+
+  mounted() {
+    // provjera dali mounted  radi
+    console.log("MOUNTED.");
+    this.getPosts();
+    // dohvat iz firebasea
+  },
+
   methods: {
     showDetails(race) {
       this.selectedRace = race;
     },
+
+    getPosts() {
+      console.log("Firebase dohvat...");
+      const racesCollection = collection(db, "races");
+      getDocs(racesCollection)
+        .then((querySnapshot) => {
+          this.races = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            this.races.push({
+              id: data.id,
+              name: data.name,
+              date: data.date,
+              location: data.location,
+              description: data.description,
+              type: data.type,
+            });
+          });
+        })
+        .catch((error) => {
+          console.error("Error getting documents: ", error);
+        });
+    },
+
     postNewRace() {
       const newRace = {
         name: this.newRaceName,
@@ -268,6 +307,13 @@ export default {
           description: this.newRaceDescription,
         });
         console.log("Document written with ID: ", docRef.id);
+        
+        this.newRaceName = "";
+        this.newRaceType = "";
+        this.newRaceDate = "";
+        this.newRaceLocation = "";
+        this.newRaceDescription = "";
+
       } catch (e) {
         console.error("Error adding document: ", e);
       }
