@@ -1,7 +1,9 @@
 
 <template>
   <div class="container">
- 
+
+     <!-- Marathons -->
+
     <div v-if="marathons.length" class="row mb-4">
       <h4 class="mb-3">Marathons</h4>
       <div
@@ -26,6 +28,8 @@
         </div>
       </div>
     </div>
+
+        <!-- Half Marathons -->
 
     <div v-if="halfMarathons.length" class="row mb-4">
       <h4 class="mb-3">Half Marathons</h4>
@@ -55,6 +59,8 @@
       </div>
     </div>
 
+       <!-- Trails -->
+
     <div v-if="trails.length" class="row mb-4">
       <h4 class="mb-3">Trails</h4>
       <div v-for="trail in trails.slice(0, 6)" :key="trail.id" class="col-md-4">
@@ -75,10 +81,14 @@
       </div>
     </div>
 
+       <!-- No Races Message -->
+
     <div
       v-else-if="!marathons.length && !halfMarathons.length && !trails.length">
       <p class="text-center mt-5">Trenutno nema utrka.</p>
     </div>
+
+        <!-- Race Details Modal -->
 
     <div
       v-if="selectedRace"
@@ -164,6 +174,7 @@ export default {
               location: data.location,
               description: data.description,
               type: data.type,
+              image: data.image || require("@/assets/run.jpeg"),
             });
           });
         })
@@ -186,22 +197,7 @@ export default {
   height: 180px;
   object-fit: cover;
 }
-.card-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-.text-center {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-.mt-5 {
-  margin-top: 3rem;
-}
-h4 {
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-}
+
 .modal {
   position: fixed;
   top: 0;
@@ -218,20 +214,5 @@ h4 {
   padding: 20px;
   border-radius: 5px;
 }
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.modal-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-.modal-body {
-  font-size: 1rem;
-}
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-}
+
 </style>
