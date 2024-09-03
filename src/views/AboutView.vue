@@ -70,7 +70,8 @@ h2 {
   font-size: 1.75rem;
   margin-top: 30px;
   margin-bottom: 15px;
-  color: #42b983;
+  color: #f58634;
+  font-weight: bold;
 }
 p {
   font-size: 1.1rem;

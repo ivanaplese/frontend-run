@@ -140,12 +140,12 @@ export default {
     font-weight: bold;
 
     &.router-link-exact-active {
-      color: #42b983;
+      color: orange;
     }
   }
 
   .text-orange {
-    color: #f58634 !important;
+    color: orange !important;
     font-size: 1.5rem;
     font-weight: bold;
   }
