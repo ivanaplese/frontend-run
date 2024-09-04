@@ -16,13 +16,13 @@ const routes = [
         name: 'Home',
         name: "home",
         component: HomeView,
-        meta: { needsUser: true },
+        meta: { needsUser: false },
     },
     {
         path: "/about",
         name: "about",
         component: AboutView,
-        meta: { needsUser: true },
+        meta: { needsUser: false },
     },
     {
         path: '/login',
