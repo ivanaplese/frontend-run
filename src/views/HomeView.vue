@@ -113,17 +113,22 @@
           </div>
           <div class="modal-footer">
             <button
+            v-if="isUserLoggedIn && isRaceInFavorites(selectedRace.id)"
+              class="btn btn-success"
+              disabled>
+              Dodano u favorite
+            </button>
+            <button
+v-if="isUserLoggedIn && !isRaceInFavorites(selectedRace.id)"
+              class="btn btn-primary"
+              @click="addToFavorites(selectedRace)">
+              Dodaj u favorite
+            </button>
+            <button
               type="button"
               class="btn btn-secondary"
               @click="selectedRace = null">
               Close
-            </button>
-            <button
-              v-if="currentUser"
-              type="button"
-              class="btn btn-primary"
-              @click="addToFavorites(selectedRace)">
-              Dodaj u favorite
             </button>
           </div>
         </div>
@@ -133,8 +138,7 @@
 </template>
 
 <script>
-// import { db, collection, getDocs } from "@/firebase.js";
-import { db, collection, getDocs, addDoc } from "@/firebase.js";
+import { db, collection, getDocs, addDoc, auth } from "@/firebase.js";
 import store from "@/store";
 
 export default {
@@ -144,6 +148,8 @@ export default {
      races: [],
     selectedRace: null,
     currentUser: store.currentUser,
+    favorites: [],
+    isUserLoggedIn: false,
     };
   },
   computed: {
@@ -161,7 +167,15 @@ export default {
   mounted() {
     console.log("MOUNTED.");
     this.getPosts();
+    this.fetchFavorites();
   },
+
+  mounted() {
+    this.getPosts();
+    this.fetchFavorites();
+    this.checkUserStatus();
+  },
+
 
   methods: {
     showDetails(race) {
@@ -169,7 +183,7 @@ export default {
     },
 
     getPosts() {
-      console.log("Firebase dohvat...");
+
       const racesCollection = collection(db, "races");
       getDocs(racesCollection)
         .then((querySnapshot) => {
@@ -192,22 +206,53 @@ export default {
         });
     },
 
+    fetchFavorites() {
+      const user = auth.currentUser;
+      if (!user) return;
+      const favoritesCollection = collection(db, "favorites");
+      getDocs(favoritesCollection)
+        .then((querySnapshot) => {
+          this.favorites = querySnapshot.docs
+            .filter((doc) => doc.data().userId === user.uid)
+            .map((doc) => doc.data().raceId);
+        })
+        .catch((error) => {
+          console.error("Greška prilikom dohvaćanja favorita:", error);
+        });
+    },
+    checkUserStatus() {
+      this.isUserLoggedIn = !!auth.currentUser;
+    },
+
     addToFavorites(race) {
-      const favoritesCollection = collection(
-        db,
-        "users",
-        this.currentUser,
-        "favorites"
-      );
-      addDoc(favoritesCollection, race)
+      const user = auth.currentUser;
+      if (!user) return;
+      // Ovdje radimo provjeru dali je već u favoritima
+      if (this.favorites && this.favorites.includes(race.id)) {
+        return; // Ne vraćaj ništa ako je već u favoritima
+      }
+
+      const favoritesCollection = collection(db, "favorites");
+      addDoc(favoritesCollection, {
+        userId: user.uid,
+        raceId: race.id,
+      })
         .then(() => {
-          alert("Utrka je dodana u favorite!");
+          if (!this.favorites) {
+            this.favorites = [];
+          }
+          this.favorites.push(race.id);
         })
         .catch((error) => {
           console.error("Greška prilikom dodavanja u favorite:", error);
         });
     },
-    
+    isRaceInFavorites(raceId) {
+      if (!this.favorites) {
+        return false;
+      }
+      return this.favorites.includes(raceId);
+    },
   },
 };
 
