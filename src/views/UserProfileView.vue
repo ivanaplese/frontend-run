@@ -25,6 +25,14 @@
         Update Profile
       </button>
 
+      <h2 class="mt-4">Your Favorites</h2>
+    <ul>
+      <li v-for="race in favorites" :key="race.id">
+        {{ race.name }} - {{ race.location }}
+      </li>
+    </ul>
+
+
 <h2 class="mt-4">User Settings</h2>
 
 <div class="form-group">
@@ -73,6 +81,8 @@
   EmailAuthProvider,
 } from "firebase/auth";
 
+import { db, collection, getDocs } from "@/firebase.js";
+
   export default {
     data() {
       return {
@@ -81,6 +91,7 @@
         currentPassword: "",
       newPassword: "",
       confirmPassword: "",
+      favorites: [],
       };
     },
     created() {
@@ -88,6 +99,7 @@
         if (user) {
           this.email = user.email;
           this.displayName = user.displayName || "";
+          this.fetchFavorites();
         }
       });
     },
@@ -134,6 +146,26 @@
           }
           });
       },
+
+      fetchFavorites() {
+      const favoritesCollection = collection(
+        db,
+        "users",
+        this.email,
+        "favorites"
+      );
+      getDocs(favoritesCollection)
+        .then((querySnapshot) => {
+          this.favorites = [];
+          querySnapshot.forEach((doc) => {
+            this.favorites.push(doc.data());
+          });
+        })
+        .catch((error) => {
+          console.error("Greška prilikom dohvaćanja favorita:", error);
+        });
+      },
+
     },
   };
   </script>

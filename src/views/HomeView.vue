@@ -118,6 +118,13 @@
               @click="selectedRace = null">
               Close
             </button>
+            <button
+              v-if="currentUser"
+              type="button"
+              class="btn btn-primary"
+              @click="addToFavorites(selectedRace)">
+              Dodaj u favorite
+            </button>
           </div>
         </div>
       </div>
@@ -126,8 +133,9 @@
 </template>
 
 <script>
-import { db, collection, getDocs } from "@/firebase.js";
-
+// import { db, collection, getDocs } from "@/firebase.js";
+import { db, collection, getDocs, addDoc } from "@/firebase.js";
+import store from "@/store";
 
 export default {
   name: "HomeView",
@@ -135,6 +143,7 @@ export default {
     return {
      races: [],
     selectedRace: null,
+    currentUser: store.currentUser,
     };
   },
   computed: {
@@ -182,6 +191,23 @@ export default {
           console.error("Error getting documents: ", error);
         });
     },
+
+    addToFavorites(race) {
+      const favoritesCollection = collection(
+        db,
+        "users",
+        this.currentUser,
+        "favorites"
+      );
+      addDoc(favoritesCollection, race)
+        .then(() => {
+          alert("Utrka je dodana u favorite!");
+        })
+        .catch((error) => {
+          console.error("Greška prilikom dodavanja u favorite:", error);
+        });
+    },
+    
   },
 };
 
