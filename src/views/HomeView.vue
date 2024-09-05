@@ -126,6 +126,13 @@
               @click="handleAddToFavorites">
               {{ addedToFavorites ? "Dodano u favorite" : "Dodaj u favorite" }}
             </button>
+            <button
+              v-if="currentUser && addedToFavorites"
+              type="button"
+              class="btn btn-danger"
+              @click="handleRemoveFromFavorites">
+              Ukloni iz favorita
+            </button>
           </div>
         </div>
       </div>
@@ -134,7 +141,7 @@
 </template>
 
 <script>
-import { db, collection, getDocs, addDoc } from "@/firebase.js";
+import { db, collection, getDocs, addDoc, deleteDoc } from "@/firebase.js";
 import store from "@/store";
 
 export default {
@@ -233,6 +240,41 @@ export default {
           console.error("Greška prilikom dodavanja u favorite:", error);
         });
     },
+    handleRemoveFromFavorites() {
+      if (this.selectedRace) {
+        this.removeFromFavorites(this.selectedRace);
+      }
+    },
+    removeFromFavorites(race) {
+      const favoritesCollection = collection(
+        db,
+        "users",
+        this.currentUser,
+        "favorites"
+      );
+      getDocs(favoritesCollection)
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            if (doc.data().id === race.id) {
+              deleteDoc(doc.ref)
+                .then(() => {
+                  this.addedToFavorites = false;
+                  alert("Utrka je uklonjena iz favorita.");
+                })
+                .catch((error) => {
+                  console.error(
+                    "Greška prilikom uklanjanja iz favorita:",
+                    error
+                  );
+                });
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Greška prilikom dohvaćanja favorita:", error);
+        });
+    },
+    
     checkIfFavorite(race) {
       const favoritesCollection = collection(
         db,
