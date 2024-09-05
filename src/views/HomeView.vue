@@ -1,13 +1,28 @@
 
 <template>
   <div class="container">
+        <!-- Search Form -->
+        <div class="row mb-4">
+      <div class="col-md-12">
+        <form @submit.prevent="performSearch">
+          <div class="input-group">
+            <input
+              v-model="searchQuery"
+              type="text"
+              class="form-control"
+              placeholder="Search by name, type, or location" />
+          </div>
+        </form>
+      </div>
+    </div>
+
 
      <!-- Marathons -->
 
-    <div v-if="marathons.length" class="row mb-4">
+      <div v-if="filteredMarathons.length" class="row mb-4">
       <h4 class="mb-3">Marathons</h4>
       <div
-        v-for="marathon in marathons.slice(0, 6)"
+        v-for="marathon in filteredMarathons.slice(0, 6)"
         :key="marathon.id"
         class="col-md-4">
         <div class="card">
@@ -31,10 +46,10 @@
 
         <!-- Half Marathons -->
 
-    <div v-if="halfMarathons.length" class="row mb-4">
+        <div v-if="filteredHalfMarathons.length" class="row mb-4">
       <h4 class="mb-3">Half Marathons</h4>
       <div
-        v-for="halfMarathon in halfMarathons.slice(0, 6)"
+        v-for="halfMarathon in filteredHalfMarathons.slice(0, 6)"
         :key="halfMarathon.id"
         class="col-md-4">
         <div class="card">
@@ -61,9 +76,12 @@
 
        <!-- Trails -->
 
-    <div v-if="trails.length" class="row mb-4">
+       <div v-if="filteredTrails.length" class="row mb-4">
       <h4 class="mb-3">Trails</h4>
-      <div v-for="trail in trails.slice(0, 6)" :key="trail.id" class="col-md-4">
+      <div
+        v-for="trail in filteredTrails.slice(0, 6)"
+        :key="trail.id"
+        class="col-md-4"> 
         <div class="card">
           <img :src="trail.image" class="card-img-top" alt="Race image" />
           <div class="card-body">
@@ -84,7 +102,11 @@
        <!-- No Races Message -->
 
     <div
-      v-else-if="!marathons.length && !halfMarathons.length && !trails.length">
+    v-else-if="
+        !filteredMarathons.length &&
+        !filteredHalfMarathons.length &&
+        !filteredTrails.length
+      ">
       <p class="text-center mt-5">Trenutno nema utrka.</p>
     </div>
 
@@ -149,6 +171,7 @@ export default {
   data() {
     return {
      races: [],
+     searchQuery: "",
     selectedRace: null,
     currentUser: store.currentUser,
     addedToFavorites: false,
@@ -163,6 +186,15 @@ export default {
     },
     trails() {
       return this.races.filter((race) => race.type === "Trail");
+    },
+    filteredMarathons() {
+      return this.marathons.filter((race) => this.matchesSearch(race));
+    },
+    filteredHalfMarathons() {
+      return this.halfMarathons.filter((race) => this.matchesSearch(race));
+    },
+    filteredTrails() {
+      return this.trails.filter((race) => this.matchesSearch(race));
     },
   },
 
@@ -240,6 +272,17 @@ export default {
           console.error("Greška prilikom dodavanja u favorite:", error);
         });
     },
+    matchesSearch(race) {
+      const query = this.searchQuery.toLowerCase();
+      return (
+        race.name.toLowerCase().includes(query) ||
+        race.type.toLowerCase().includes(query) ||
+        race.location.toLowerCase().includes(query)
+      );
+    },
+    performSearch() {
+      // Trigger computed properties to update based on search query
+    },
     handleRemoveFromFavorites() {
       if (this.selectedRace) {
         this.removeFromFavorites(this.selectedRace);
@@ -274,7 +317,7 @@ export default {
           console.error("Greška prilikom dohvaćanja favorita:", error);
         });
     },
-    
+
     checkIfFavorite(race) {
       const favoritesCollection = collection(
         db,
@@ -326,6 +369,10 @@ export default {
   background: white;
   padding: 20px;
   border-radius: 5px;
+}
+.input-group {
+  max-width: 600px;
+  margin: auto;
 }
 
 </style>
