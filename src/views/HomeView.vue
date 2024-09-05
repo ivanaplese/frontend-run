@@ -113,22 +113,18 @@
           </div>
           <div class="modal-footer">
             <button
-            v-if="isUserLoggedIn && isRaceInFavorites(selectedRace.id)"
-              class="btn btn-success"
-              disabled>
-              Dodano u favorite
-            </button>
-            <button
-v-if="isUserLoggedIn && !isRaceInFavorites(selectedRace.id)"
-              class="btn btn-primary"
-              @click="addToFavorites(selectedRace)">
-              Dodaj u favorite
-            </button>
-            <button
               type="button"
               class="btn btn-secondary"
               @click="selectedRace = null">
               Close
+            </button>
+            <button
+              v-if="currentUser"
+              type="button"
+              class="btn btn-primary"
+              :disabled="addedToFavorites"
+              @click="handleAddToFavorites">
+              {{ addedToFavorites ? "Dodano u favorite" : "Dodaj u favorite" }}
             </button>
           </div>
         </div>
@@ -138,7 +134,7 @@ v-if="isUserLoggedIn && !isRaceInFavorites(selectedRace.id)"
 </template>
 
 <script>
-import { db, collection, getDocs, addDoc, auth } from "@/firebase.js";
+import { db, collection, getDocs, addDoc } from "@/firebase.js";
 import store from "@/store";
 
 export default {
@@ -148,8 +144,7 @@ export default {
      races: [],
     selectedRace: null,
     currentUser: store.currentUser,
-    favorites: [],
-    isUserLoggedIn: false,
+    addedToFavorites: false,
     };
   },
   computed: {
@@ -165,21 +160,14 @@ export default {
   },
 
   mounted() {
-    console.log("MOUNTED.");
     this.getPosts();
-    this.fetchFavorites();
-  },
 
-  mounted() {
-    this.getPosts();
-    this.fetchFavorites();
-    this.checkUserStatus();
   },
-
 
   methods: {
     showDetails(race) {
       this.selectedRace = race;
+      this.checkIfFavorite(race);
     },
 
     getPosts() {
@@ -206,52 +194,64 @@ export default {
         });
     },
 
-    fetchFavorites() {
-      const user = auth.currentUser;
-      if (!user) return;
-      const favoritesCollection = collection(db, "favorites");
+    handleAddToFavorites() {
+      if (this.selectedRace) {
+        this.addToFavorites(this.selectedRace);
+      }
+    },
+    addToFavorites(race) {
+      const favoritesCollection = collection(
+        db,
+        "users",
+        this.currentUser,
+        "favorites"
+      );
+
       getDocs(favoritesCollection)
         .then((querySnapshot) => {
-          this.favorites = querySnapshot.docs
-            .filter((doc) => doc.data().userId === user.uid)
-            .map((doc) => doc.data().raceId);
-        })
-        .catch((error) => {
-          console.error("Greška prilikom dohvaćanja favorita:", error);
-        });
-    },
-    checkUserStatus() {
-      this.isUserLoggedIn = !!auth.currentUser;
-    },
 
-    addToFavorites(race) {
-      const user = auth.currentUser;
-      if (!user) return;
-      // Ovdje radimo provjeru dali je već u favoritima
-      if (this.favorites && this.favorites.includes(race.id)) {
-        return; // Ne vraćaj ništa ako je već u favoritima
-      }
-
-      const favoritesCollection = collection(db, "favorites");
-      addDoc(favoritesCollection, {
-        userId: user.uid,
-        raceId: race.id,
-      })
-        .then(() => {
-          if (!this.favorites) {
-            this.favorites = [];
+          let alreadyExists = false;
+          querySnapshot.forEach((doc) => {
+            if (doc.data().id === race.id) {
+              alreadyExists = true;
+            }
+          });
+          if (!alreadyExists) {
+            return addDoc(favoritesCollection, race);
+          } else {
+            alert("Ova utrka je već u favoritima.");
+            throw new Error("Race already in favorites");
           }
-          this.favorites.push(race.id);
+
+        })
+
+        .then(() => {
+          this.addedToFavorites = true;
+          alert("Utrka je dodana u favorite!");
         })
         .catch((error) => {
           console.error("Greška prilikom dodavanja u favorite:", error);
         });
     },
-    isRaceInFavorites(raceId) {
-      if (!this.favorites) {
-        return false;
-      }
-      return this.favorites.includes(raceId);
+    checkIfFavorite(race) {
+      const favoritesCollection = collection(
+        db,
+        "users",
+        this.currentUser,
+        "favorites"
+      );
+      getDocs(favoritesCollection)
+        .then((querySnapshot) => {
+          this.addedToFavorites = false;
+          querySnapshot.forEach((doc) => {
+            if (doc.data().id === race.id) {
+              this.addedToFavorites = true;
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Greška prilikom provjere favorita:", error);
+        });
     },
   },
 };
