@@ -199,6 +199,7 @@ export default {
   },
 
   mounted() {
+    this.currentUser = store.currentUser;
     this.getPosts();
 
   },
@@ -234,10 +235,13 @@ export default {
     },
 
     handleAddToFavorites() {
-      if (this.selectedRace) {
+      if (this.currentUser && this.selectedRace) {
         this.addToFavorites(this.selectedRace);
+      } else {
+        alert("Morate biti prijavljeni da biste dodali utrke u favorite.");
       }
     },
+
     addToFavorites(race) {
       const favoritesCollection = collection(
         db,
@@ -284,10 +288,13 @@ export default {
       // Trigger computed properties to update based on search query
     },
     handleRemoveFromFavorites() {
-      if (this.selectedRace) {
+      if (this.currentUser && this.selectedRace) {
         this.removeFromFavorites(this.selectedRace);
-      }
-    },
+      } 
+     else {
+      alert("Morate biti prijavljeni da biste uklonili utrke iz favorita.");
+    }
+  },
     removeFromFavorites(race) {
       const favoritesCollection = collection(
         db,
@@ -319,6 +326,13 @@ export default {
     },
 
     checkIfFavorite(race) {
+
+      if (!this.currentUser) {
+        this.addedToFavorites = false;
+        return;
+      }
+
+      
       const favoritesCollection = collection(
         db,
         "users",
