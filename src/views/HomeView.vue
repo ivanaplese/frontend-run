@@ -210,30 +210,30 @@ export default {
       this.checkIfFavorite(race);
     },
 
-    getPosts() {
-
-      const racesCollection = collection(db, "races");
-      getDocs(racesCollection)
-        .then((querySnapshot) => {
-          this.races = [];
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            this.races.push({
-              id: doc.id,
-              name: data.name,
-              date: data.date,
-              location: data.location,
-              description: data.description,
-              type: data.type,
-              image: data.image || require("@/assets/run.jpeg"),
-            });
+    async getPosts() {
+      try {
+        const racesCollection = collection(db, "races");
+        const querySnapshot = await getDocs(racesCollection);
+        this.races = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          this.races.push({
+            id: doc.id,
+            name: data.name,
+            date: data.date,
+            location: data.location,
+            description: data.description,
+            type: data.type,
+            image: data.image || require("@/assets/run.jpeg"),
           });
-        })
-        .catch((error) => {
-          console.error("Error getting documents: ", error);
+ 
         });
+      } catch (error) {
+        console.error("Error getting documents: ", error);
+      }
     },
 
+  
     handleAddToFavorites() {
       if (this.currentUser && this.selectedRace) {
         this.addToFavorites(this.selectedRace);
@@ -242,40 +242,34 @@ export default {
       }
     },
 
-    addToFavorites(race) {
-      const favoritesCollection = collection(
-        db,
-        "users",
-        this.currentUser,
-        "favorites"
-      );
-
-      getDocs(favoritesCollection)
-        .then((querySnapshot) => {
-
-          let alreadyExists = false;
-          querySnapshot.forEach((doc) => {
-            if (doc.data().id === race.id) {
-              alreadyExists = true;
-            }
-          });
-          if (!alreadyExists) {
-            return addDoc(favoritesCollection, race);
-          } else {
-            alert("Ova utrka je već u favoritima.");
-            throw new Error("Race already in favorites");
+    async addToFavorites(race) {
+      try {
+        const favoritesCollection = collection(
+          db,
+          "users",
+          this.currentUser,
+          "favorites"
+        );
+        const querySnapshot = await getDocs(favoritesCollection);
+        let alreadyExists = false;
+        querySnapshot.forEach((doc) => {
+          if (doc.data().id === race.id) {
+            alreadyExists = true;
           }
-
-        })
-
-        .then(() => {
+        });
+        if (!alreadyExists) {
+          await addDoc(favoritesCollection, race);
           this.addedToFavorites = true;
           alert("Utrka je dodana u favorite!");
-        })
-        .catch((error) => {
-          console.error("Greška prilikom dodavanja u favorite:", error);
-        });
+        } else {
+          alert("Ova utrka je već u favoritima.");
+          throw new Error("Race already in favorites");
+        }
+      } catch (error) {
+        console.error("Greška prilikom dodavanja u favorite:", error);
+      }
     },
+
     matchesSearch(race) {
       const query = this.searchQuery.toLowerCase();
       return (
@@ -295,62 +289,66 @@ export default {
       alert("Morate biti prijavljeni da biste uklonili utrke iz favorita.");
     }
   },
-    removeFromFavorites(race) {
-      const favoritesCollection = collection(
-        db,
-        "users",
-        this.currentUser,
-        "favorites"
-      );
-      getDocs(favoritesCollection)
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            if (doc.data().id === race.id) {
-              deleteDoc(doc.ref)
-                .then(() => {
-                  this.addedToFavorites = false;
-                  alert("Utrka je uklonjena iz favorita.");
-                })
-                .catch((error) => {
-                  console.error(
-                    "Greška prilikom uklanjanja iz favorita:",
-                    error
-                  );
-                });
+  async removeFromFavorites(race) {
+      try {
+        const favoritesCollection = collection(
+          db,
+          "users",
+          this.currentUser,
+          "favorites"
+        );
+        const querySnapshot = await getDocs(favoritesCollection);
+        querySnapshot.forEach(async (doc) => {
+          if (doc.data().id === race.id) {
+            try {
+              await deleteDoc(doc.ref);
+              this.addedToFavorites = false;
+              alert("Utrka je uklonjena iz favorita.");
+            } catch (error) {
+              console.error("Greška prilikom uklanjanja iz favorita:", error);
             }
-          });
-        })
-        .catch((error) => {
-          console.error("Greška prilikom dohvaćanja favorita:", error);
+          }
         });
+      } catch (error) {
+        console.error("Greška prilikom dohvaćanja favorita:", error);
+      }
     },
 
-    checkIfFavorite(race) {
-
+    async checkIfFavorite(race) {
       if (!this.currentUser) {
         this.addedToFavorites = false;
         return;
       }
 
       
-      const favoritesCollection = collection(
-        db,
-        "users",
-        this.currentUser,
-        "favorites"
-      );
-      getDocs(favoritesCollection)
-        .then((querySnapshot) => {
-          this.addedToFavorites = false;
-          querySnapshot.forEach((doc) => {
-            if (doc.data().id === race.id) {
-              this.addedToFavorites = true;
-            }
-          });
-        })
-        .catch((error) => {
-          console.error("Greška prilikom provjere favorita:", error);
+      try {
+        const favoritesCollection = collection(
+          db,
+          "users",
+          this.currentUser,
+          "favorites"
+        );
+        const querySnapshot = await getDocs(favoritesCollection);
+        this.addedToFavorites = false;
+        querySnapshot.forEach((doc) => {
+          if (doc.data().id === race.id) {
+            this.addedToFavorites = true;
+          }
         });
+      } catch (error) {
+        console.error("Greška prilikom provjere favorita:", error);
+      }
+    },
+    matchesSearch(race) {
+      const query = this.searchQuery.toLowerCase();
+      return (
+        race.name.toLowerCase().includes(query) ||
+        race.type.toLowerCase().includes(query) ||
+        race.location.toLowerCase().includes(query)
+      );
+    },
+    performSearch() {
+      // Trigger computed properties to update based on search query
     },
   },
 };
