@@ -104,70 +104,66 @@ import { db, collection, getDocs } from "@/firebase.js";
       });
     },
     methods: {
-      updateProfile() {
+      async updateProfile() {
+      try {
         const user = auth.currentUser;
-        updateProfile(user, {
+        await updateProfile(user, {
           displayName: this.displayName,
-        })
-          .then(() => {
-            alert("Profile successfully updated.");
-          })
-          .catch((error) => {
-            console.error("An error occurred while updating the profile", error);
-          alert("An error occurred. Please try again.");
         });
+        alert("Profile successfully updated.");
+      } catch (error) {
+        console.error("An error occurred while updating the profile", error);
+        alert("An error occurred. Please try again.");
+      }
     },
-    changePassword() {
+
+    async changePassword() {
       if (this.newPassword !== this.confirmPassword) {
         alert("The new passwords do not match!");
         return;
       }
-      const user = auth.currentUser;
-      const credential = EmailAuthProvider.credential(
-        user.email,
-        this.currentPassword
-      );
-      reauthenticateWithCredential(user, credential)
-        .then(() => {
-          return updatePassword(user, this.newPassword);
-        })
-        .then(() => {
-          alert("Password successfully changed.");
-          this.currentPassword = "";
-          this.newPassword = "";
-          this.confirmPassword = "";
-        })
-        .catch((error) => {
-          console.error("An error occurred while changing the password", error);
-          if (error.code === "auth/wrong-password") {
-            alert("The current password is incorrect.");
-          } else {
-            alert("An error occurred. Please try again.");
-          }
-          });
+      try {
+        const user = auth.currentUser;
+        const credential = EmailAuthProvider.credential(
+          user.email,
+          this.currentPassword
+        );
+        await reauthenticateWithCredential(user, credential);
+        await updatePassword(user, this.newPassword);
+        alert("Password successfully changed.");
+        this.currentPassword = "";
+        this.newPassword = "";
+        this.confirmPassword = "";
+      } catch (error) {
+        console.error("An error occurred while changing the password", error);
+        if (error.code === "auth/wrong-password") {
+          alert("The current password is incorrect.");
+        } else {
+          alert("An error occurred. Please try again.");
+        }
+      }
       },
 
-      fetchFavorites() {
-      const favoritesCollection = collection(
-        db,
-        "users",
-        this.email,
-        "favorites"
-      );
-      getDocs(favoritesCollection)
-        .then((querySnapshot) => {
-          this.favorites = [];
-          querySnapshot.forEach((doc) => {
-            this.favorites.push(doc.data());
-          });
-        })
-        .catch((error) => {
-          console.error("Greška prilikom dohvaćanja favorita:", error);
+      async fetchFavorites() {
+      try {
+        const favoritesCollection = collection(
+          db,
+          "users",
+          this.email,
+          "favorites"
+        );
+        const querySnapshot = await getDocs(favoritesCollection);
+        this.favorites = [];
+        querySnapshot.forEach((doc) => {
+          this.favorites.push(doc.data());
         });
-      },
-
+      } catch (error) {
+        console.error("Greška prilikom dohvaćanja favorita:", error);
+      }
     },
-  };
+  },
+};
+
   </script>
   
   <style scoped>
