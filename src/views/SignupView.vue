@@ -129,8 +129,16 @@ export default {
       // Kreiranje korisničkog naloga
       createUserWithEmailAndPassword(auth, this.email, this.password)
       .then((userCredential) => {
-          return updateProfile(userCredential.user, {
+        const user = userCredential.user;
+        return updateProfile(user, {
             displayName: `${this.firstName} ${this.lastName}`,
+          }).then(() => {
+            return setDoc(doc(db, "users", user.uid), {
+              email: user.email,
+              firstName: this.firstName,
+              lastName: this.lastName,
+              isAdmin: false,
+            });
           });
         })
         .then(() => {

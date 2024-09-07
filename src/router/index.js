@@ -46,7 +46,7 @@ const routes = [
         path: "/newraces",
         name: "new-races",
         component: NewRace,
-        meta: { needsUser: true },
+        meta: { needsUser: true, adminOnly: true },
     },
     {
         path: "/:catchAll(.*)",
@@ -62,11 +62,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 
     const isLoggedIn = store.currentUser !== null;
+    const isAdmin = store.isAdmin;
 
     if (isLoggedIn && to.meta.guestOnly) {
         next({ name: "home" });
     } else if (!isLoggedIn && to.meta.needsUser) {
         next({ name: "login" });
+    } else if (to.meta.adminOnly && !isAdmin) {
+        next({ name: "home" }); // Preusmjeri korisnike koji nisu admini
     } else {
         next();
     }

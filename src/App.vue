@@ -51,7 +51,7 @@
                   >
                 </li>
                 <li>
-                  <router-link to="/newraces" class="dropdown-item"
+                  <router-link v-if="isAdmin" to="/newraces"
                     >Dodaj novu utrku</router-link
                   >
                 </li>
