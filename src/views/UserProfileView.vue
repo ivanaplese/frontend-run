@@ -35,6 +35,7 @@
 
 <h2 class="mt-4">User Settings</h2>
 
+
 <div class="form-group">
   <label for="currentPassword">Current Password:</label>
   <input
@@ -70,8 +71,6 @@
   
   <script>
   import { auth } from "@/firebase.js";
-  // import { onAuthStateChanged, updateProfile } from "firebase/auth";
-//novo 31.8.
 
   import {
   onAuthStateChanged,
@@ -175,12 +174,9 @@ import { db, collection, getDocs } from "@/firebase.js";
   .form-group {
     margin-bottom: 15px;
   }
-  /* .btn {
-    margin-top: 10px;
-  } */
   .btn {
   margin-top: 10px;
-  background-color: #f58634; /* Orange color */
+  background-color: #f58634; 
   border-color: #f58634;
   color: white;
 }

@@ -1,4 +1,3 @@
-
 <template>
   <div class="container">
         <!-- Search Form -->
@@ -18,7 +17,6 @@
 
 
      <!-- Marathons -->
-
       <div v-if="filteredMarathons.length" class="row mb-4">
       <h4 class="mb-3">Marathons</h4>
       <div
@@ -44,8 +42,8 @@
       </div>
     </div>
 
-        <!-- Half Marathons -->
 
+        <!-- Half Marathons -->
         <div v-if="filteredHalfMarathons.length" class="row mb-4">
       <h4 class="mb-3">Half Marathons</h4>
       <div
@@ -74,8 +72,8 @@
       </div>
     </div>
 
-       <!-- Trails -->
 
+       <!-- Trails -->
        <div v-if="filteredTrails.length" class="row mb-4">
       <h4 class="mb-3">Trails</h4>
       <div
@@ -99,8 +97,8 @@
       </div>
     </div>
 
-       <!-- No Races Message -->
 
+       <!-- No Races Message -->
     <div
     v-else-if="
         !filteredMarathons.length &&
@@ -110,8 +108,8 @@
       <p class="text-center mt-5">Trenutno nema utrka.</p>
     </div>
 
-        <!-- Race Details Modal -->
 
+        <!-- Race Details Modal -->
     <div
       v-if="selectedRace"
       class="modal"
@@ -279,7 +277,6 @@ export default {
       );
     },
     performSearch() {
-      // Trigger computed properties to update based on search query
     },
     handleRemoveFromFavorites() {
       if (this.currentUser && this.selectedRace) {
@@ -348,12 +345,9 @@ export default {
       );
     },
     performSearch() {
-      // Trigger computed properties to update based on search query
     },
   },
 };
-
-
 
 
 </script>

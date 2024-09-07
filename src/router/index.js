@@ -1,7 +1,4 @@
-
 import { createRouter, createWebHistory } from 'vue-router';
-// import Home from '../views/HomeView.vue';
-
 import HomeView from "../views/HomeView.vue";
 import AboutView from "../views/AboutView.vue";
 import LoginView from "../views/LoginView.vue";
@@ -74,7 +71,6 @@ router.beforeEach((to, from, next) => {
         next();
     }
 });
-
 
 
 export default router;

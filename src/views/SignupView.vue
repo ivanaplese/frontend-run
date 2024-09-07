@@ -79,7 +79,6 @@
               required />
           </div>
         </div>
-        <!-- <button type="submit" class="btn btn-primary w-100">Sign Up</button> -->
         <button type="button" @click="signup" class="btn btn-primary w-100">
           Sign Up
         </button>
@@ -97,8 +96,7 @@
 <script>
 
 import { auth } from "@/firebase.js";
-// import { createUserWithEmailAndPassword } from "firebase/auth";
-// import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+
 import {
   createUserWithEmailAndPassword,
   signOut,
@@ -121,12 +119,11 @@ export default {
   },
   methods: {
     signup() {
-      // Provera da li se lozinke poklapaju
       if (this.password !== this.passwordRepeat) {
         alert("Lozinke se ne poklapaju!");
         return;
       }
-      // Kreiranje korisničkog naloga
+      // Kreiranje korisničkog profila
       createUserWithEmailAndPassword(auth, this.email, this.password)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -167,7 +164,6 @@ export default {
 };
 
 </script>
-
 <style scoped>
 .signup-container {
   background-color: #f8f9fa;

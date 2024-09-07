@@ -40,11 +40,6 @@
               <ul
                 class="dropdown-menu dropdown-menu-end"
                 aria-labelledby="userDropdown">
-                <!-- <li>
-                  <router-link to="/settings" class="dropdown-item"
-                    >Postavke</router-link
-                  >
-                <!-- </li> -->
                 <li>
                   <router-link to="/profile" class="dropdown-item"
                     >Profil</router-link
@@ -105,15 +100,12 @@ export default {
       if (user) {
         store.currentUser = user.email;
         this.currentUser = store.currentUser;
-        // console.log("*** User", user.email);
         if (this.$route.name === "login" || this.$route.name === "signup") {
           this.$router.push({ name: "home" });
         }
       } else {
         store.currentUser = null;
         this.currentUser = null;
-        // console.log("*** No user");
-        // if (this.$route.name !== "login") {
           if (this.$route.meta.needsUser) {
           this.$router.push({ name: "login" });
         }

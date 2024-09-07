@@ -7,7 +7,6 @@
           <input type="text" id="name" v-model="newRaceName" required />
         </div>
 
-
         <div>
           <label for="type">Race Type:</label>
           <select id="type" v-model="newRaceType" required>
@@ -16,7 +15,6 @@
           <option value="Trail">Trail</option>
         </select>
         </div>
-
 
         <div>
           <label for="date">Date:</label>
@@ -105,7 +103,6 @@ import runImage from "@/assets/run.jpeg";
 
   
   </script>
-  
   <style scoped>
   
   .form-inline {
