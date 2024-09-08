@@ -46,7 +46,10 @@
                   >
                 </li>
                 <li>
-                  <router-link v-if="isAdmin" to="/newraces"
+                  <router-link
+                    v-if="isAdmin"
+                    to="/newraces"
+                    class="dropdown-item"
                     >Dodaj novu utrku</router-link
                   >
                 </li>
@@ -113,21 +116,10 @@ export default {
       }
     });
   },
-  mounted() {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        store.currentUser = user;
-        // ako je moj email postavi mi na true
-        if (user.email === "plese@gmail.com") {
-          store.isAdmin = true;
-        } else {
-          store.isAdmin = false;
-        }
-      } else {
-        store.currentUser = null;
-        store.isAdmin = false;
-      }
-    });
+  computed: {
+    isAdmin() {
+      return store.isAdmin;
+    },
   },
 };
 </script>

@@ -43,7 +43,7 @@ const routes = [
         path: "/newraces",
         name: "new-races",
         component: NewRace,
-        meta: { needsUser: true, adminOnly: true },
+        meta: { needsUser: true, adminOnly: true }, // Samo admini mogu pristupiti
     },
     {
         path: "/:catchAll(.*)",
@@ -66,7 +66,7 @@ router.beforeEach((to, from, next) => {
     } else if (!isLoggedIn && to.meta.needsUser) {
         next({ name: "login" });
     } else if (to.meta.adminOnly && !isAdmin) {
-        next({ name: "home" });
+        next({ name: "home" }); // Preusmjeri usere koji nisu admini
     } else {
         next();
     }
