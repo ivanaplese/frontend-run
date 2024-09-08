@@ -66,7 +66,7 @@ router.beforeEach((to, from, next) => {
     } else if (!isLoggedIn && to.meta.needsUser) {
         next({ name: "login" });
     } else if (to.meta.adminOnly && !isAdmin) {
-        next({ name: "home" }); // Preusmjeri korisnike koji nisu admini
+        next({ name: "home" });
     } else {
         next();
     }

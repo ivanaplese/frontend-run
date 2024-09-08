@@ -80,6 +80,7 @@ export default {
   data() {
     return {
       currentUser: null,
+      isAdmin: false,
     };
   },
   methods: {
@@ -109,6 +110,22 @@ export default {
           if (this.$route.meta.needsUser) {
           this.$router.push({ name: "login" });
         }
+      }
+    });
+  },
+  mounted() {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        store.currentUser = user;
+        // ako je moj email postavi mi na true
+        if (user.email === "plese@gmail.com") {
+          store.isAdmin = true;
+        } else {
+          store.isAdmin = false;
+        }
+      } else {
+        store.currentUser = null;
+        store.isAdmin = false;
       }
     });
   },
