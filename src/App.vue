@@ -35,6 +35,7 @@
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
+                Pozdrav, 
                 {{ currentUser }}
               </a>
               <ul
