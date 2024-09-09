@@ -142,16 +142,28 @@
               v-if="currentUser"
               type="button"
               class="btn btn-primary"
-              :disabled="addedToFavorites"
-              @click="handleAddToFavorites">
-              {{ addedToFavorites ? "Dodano u favorite" : "Dodaj u favorite" }}
+              @click="
+                addedToFavorites
+                  ? handleRemoveFromFavorites()
+                  : handleAddToFavorites()
+              ">
+              {{ addedToFavorites ? "Makni iz favorita" : "Dodaj u favorite" }}
             </button>
+           <!-- Gumb za uređivanje utrke samo ako je korisnik admin
             <button
-              v-if="currentUser && addedToFavorites"
+            v-if="isAdmin"
+              type="button"
+              class="btn btn-warning"
+              @click="IdiNaUredivanje(selectedRace)">
+              Uredi utrku
+            </button> -->
+
+            <button
+              v-if="isAdmin"
               type="button"
               class="btn btn-danger"
-              @click="handleRemoveFromFavorites">
-              Ukloni iz favorita
+              @click="IzbrisiUtrku(selectedRace)">
+              Izbriši utrku
             </button>
           </div>
         </div>
@@ -161,7 +173,7 @@
 </template>
 
 <script>
-import { db, collection, getDocs, addDoc, deleteDoc } from "@/firebase.js";
+import { db, collection, getDocs, addDoc, deleteDoc, doc } from "@/firebase.js";
 import store from "@/store";
 
 export default {
