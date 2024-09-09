@@ -48,10 +48,10 @@
                 </li>
                 <li>
                   <router-link
-                    v-if="isAdmin"
                     to="/newraces"
                     class="dropdown-item"
-                    >Dodaj novu utrku</router-link
+                    v-if="isAdmin">
+                    Dodaj novu utrku</router-link
                   >
                 </li>
                 <li><hr class="dropdown-divider" /></li>

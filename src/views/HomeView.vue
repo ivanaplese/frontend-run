@@ -344,8 +344,6 @@ export default {
         race.location.toLowerCase().includes(query)
       );
     },
-    performSearch() {
-    },
   },
 };
 
