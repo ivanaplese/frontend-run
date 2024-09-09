@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-        <!-- Search Form -->
-        <div class="row mb-4">
+    <!-- Search Form -->
+    <div class="row mb-4">
       <div class="col-md-12">
         <form @submit.prevent="performSearch">
           <div class="input-group">
@@ -15,9 +15,8 @@
       </div>
     </div>
 
-
-     <!-- Marathons -->
-      <div v-if="filteredMarathons.length" class="row mb-4">
+    <!-- Marathons -->
+    <div v-if="filteredMarathons.length" class="row mb-4">
       <h4 class="mb-3">Marathons</h4>
       <div
         v-for="marathon in filteredMarathons.slice(0, 6)"
@@ -42,9 +41,8 @@
       </div>
     </div>
 
-
-        <!-- Half Marathons -->
-        <div v-if="filteredHalfMarathons.length" class="row mb-4">
+    <!-- Half Marathons -->
+    <div v-if="filteredHalfMarathons.length" class="row mb-4">
       <h4 class="mb-3">Half Marathons</h4>
       <div
         v-for="halfMarathon in filteredHalfMarathons.slice(0, 6)"
@@ -72,14 +70,13 @@
       </div>
     </div>
 
-
-       <!-- Trails -->
-       <div v-if="filteredTrails.length" class="row mb-4">
+    <!-- Trails -->
+    <div v-if="filteredTrails.length" class="row mb-4">
       <h4 class="mb-3">Trails</h4>
       <div
         v-for="trail in filteredTrails.slice(0, 6)"
         :key="trail.id"
-        class="col-md-4"> 
+        class="col-md-4">
         <div class="card">
           <img :src="trail.image" class="card-img-top" alt="Race image" />
           <div class="card-body">
@@ -97,10 +94,9 @@
       </div>
     </div>
 
-
-       <!-- No Races Message -->
+    <!-- No Races Message -->
     <div
-    v-else-if="
+      v-else-if="
         !filteredMarathons.length &&
         !filteredHalfMarathons.length &&
         !filteredTrails.length
@@ -108,8 +104,7 @@
       <p class="text-center mt-5">Trenutno nema utrka.</p>
     </div>
 
-
-        <!-- Race Details Modal -->
+    <!-- Race Details Modal -->
     <div
       v-if="selectedRace"
       class="modal"
@@ -148,10 +143,11 @@
                   : handleAddToFavorites()
               ">
               {{ addedToFavorites ? "Makni iz favorita" : "Dodaj u favorite" }}
-          </button>
-          <!-- Gumb za uređivanje utrke samo ako je korisnik admin
+            </button>
+
+            <!-- Gumb za uređivanje utrke samo ako je korisnik admin
             <button
-          v-if="isAdmin"
+              v-if="isAdmin"
               type="button"
               class="btn btn-warning"
               @click="IdiNaUredivanje(selectedRace)">
@@ -180,12 +176,12 @@ export default {
   name: "HomeView",
   data() {
     return {
-     races: [],
-     searchQuery: "",
-    selectedRace: null,
-    currentUser: store.currentUser,
-    addedToFavorites: false,
-    isAdmin: store.isAdmin,
+      races: [],
+      searchQuery: "",
+      selectedRace: null,
+      currentUser: store.currentUser,
+      addedToFavorites: false,
+      isAdmin: store.isAdmin,
     };
   },
   computed: {
@@ -208,14 +204,11 @@ export default {
       return this.trails.filter((race) => this.matchesSearch(race));
     },
   },
-
   mounted() {
     this.currentUser = store.currentUser;
     this.getPosts();
     this.isAdmin = store.isAdmin;
-
   },
-
   methods: {
     showDetails(race) {
       this.selectedRace = race;
@@ -238,14 +231,12 @@ export default {
             type: data.type,
             image: data.image || require("@/assets/run.jpeg"),
           });
- 
         });
       } catch (error) {
         console.error("Error getting documents: ", error);
       }
     },
 
-  
     handleAddToFavorites() {
       if (this.currentUser && this.selectedRace) {
         this.addToFavorites(this.selectedRace);
@@ -282,26 +273,15 @@ export default {
       }
     },
 
-    matchesSearch(race) {
-      const query = this.searchQuery.toLowerCase();
-      return (
-        race.name.toLowerCase().includes(query) ||
-        race.type.toLowerCase().includes(query) ||
-        race.location.toLowerCase().includes(query)
-      );
-    },
-
-    performSearch() {
-    },
     handleRemoveFromFavorites() {
       if (this.currentUser && this.selectedRace) {
         this.removeFromFavorites(this.selectedRace);
-      } 
-     else {
-      alert("Morate biti prijavljeni da biste uklonili utrke iz favorita.");
-    }
-  },
-  async removeFromFavorites(race) {
+      } else {
+        alert("Morate biti prijavljeni da biste uklonili utrke iz favorita.");
+      }
+    },
+
+    async removeFromFavorites(race) {
       try {
         const favoritesCollection = collection(
           db,
@@ -332,7 +312,6 @@ export default {
         return;
       }
 
-      
       try {
         const favoritesCollection = collection(
           db,
@@ -351,6 +330,7 @@ export default {
         console.error("Greška prilikom provjere favorita:", error);
       }
     },
+
     matchesSearch(race) {
       const query = this.searchQuery.toLowerCase();
       return (
@@ -359,12 +339,12 @@ export default {
         race.location.toLowerCase().includes(query)
       );
     },
-
-        // // Otvori stranicu za uređivanje utrke
+    // // Otvori stranicu za uređivanje utrke
     // IdiNaUredivanje(race) {
     //   this.$router.push(`/uredi-utrku/${race.id}`);
     // },
-    
+
+    // Izbriši odabranu utrku
     async IzbrisiUtrku(race) {
       try {
         await deleteDoc(doc(db, "races", race.id));
@@ -377,9 +357,8 @@ export default {
     },
   },
 };
-
-
 </script>
+
 <style scoped>
 .card {
   height: 100%;
@@ -388,7 +367,6 @@ export default {
   height: 180px;
   object-fit: cover;
 }
-
 .modal {
   position: fixed;
   top: 0;
@@ -409,5 +387,4 @@ export default {
   max-width: 600px;
   margin: auto;
 }
-
 </style>
