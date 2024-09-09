@@ -148,10 +148,10 @@
                   : handleAddToFavorites()
               ">
               {{ addedToFavorites ? "Makni iz favorita" : "Dodaj u favorite" }}
-            </button>
-           <!-- Gumb za uređivanje utrke samo ako je korisnik admin
+          </button>
+          <!-- Gumb za uređivanje utrke samo ako je korisnik admin
             <button
-            v-if="isAdmin"
+          v-if="isAdmin"
               type="button"
               class="btn btn-warning"
               @click="IdiNaUredivanje(selectedRace)">
@@ -185,6 +185,7 @@ export default {
     selectedRace: null,
     currentUser: store.currentUser,
     addedToFavorites: false,
+    isAdmin: store.isAdmin,
     };
   },
   computed: {
@@ -211,6 +212,7 @@ export default {
   mounted() {
     this.currentUser = store.currentUser;
     this.getPosts();
+    this.isAdmin = store.isAdmin;
 
   },
 
@@ -288,6 +290,7 @@ export default {
         race.location.toLowerCase().includes(query)
       );
     },
+
     performSearch() {
     },
     handleRemoveFromFavorites() {
@@ -355,6 +358,22 @@ export default {
         race.type.toLowerCase().includes(query) ||
         race.location.toLowerCase().includes(query)
       );
+    },
+
+        // // Otvori stranicu za uređivanje utrke
+    // IdiNaUredivanje(race) {
+    //   this.$router.push(`/uredi-utrku/${race.id}`);
+    // },
+    
+    async IzbrisiUtrku(race) {
+      try {
+        await deleteDoc(doc(db, "races", race.id));
+        this.selectedRace = null; // Zatvori modalni prozor nakon brisanja
+        alert("Utrka je uspješno izbrisana.");
+        this.getPosts(); // Osvježi listu utrka
+      } catch (error) {
+        console.error("Greška prilikom brisanja utrke:", error);
+      }
     },
   },
 };
