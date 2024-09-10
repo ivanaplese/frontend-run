@@ -2,47 +2,30 @@
     <v-app>
       <v-container>
         <h2 class="mb-4 pb-2 pb-md-0 mb-md-2 text-center">Uredi utrku</h2>
-        <v-form v-if="name">
+        <v-form v-if="race.name">
           <!-- Prikaži formu samo ako su podaci učitani -->
           <v-row>
-            <v-col cols="12" sm="6">
-              <v-img
-                :src="image || defaultImage"
-                alt="Trenutna slika utrke"
-                height="350px"
-                width="350px" />
-              <p class="text-muted">Slika se ne može mijenjati</p>
-            </v-col>
+           
             <v-col sm="6">
-              <v-text-field
-                outlined
-                v-model="name"
-                label="Naziv utrke"></v-text-field>
+              <input type="text" v-model="race.name" placeholder="Naziv utrke" />
   
-              <v-text-field
-                outlined
-                v-model="location"
-                label="Lokacija"></v-text-field>
+              <input type="text" v-model="race.location" placeholder="Lokacija" />
+
+              <input type="date" v-model="race.date" placeholder="Datum utrke" />
   
-              <v-text-field
-                outlined
-                v-model="date"
-                label="Datum utrke"></v-text-field>
-  
-              <v-textarea
-                counter
-                outlined
-                v-model="description"
-                label="Opis utrke"></v-textarea>
+              <input
+              type="text"
+              v-model="race.description"
+              placeholder="Opis utrke" />
             </v-col>
           </v-row>
           <v-row>
             <v-col sm="2">
               <v-btn
                 @click="UrediPodatke"
-                class="d-flex justify-center align-center"
-                >Submit</v-btn
-              >
+                class="d-flex justify-center align-center">
+              Submit
+            </v-btn>
             </v-col>
           </v-row>
         </v-form>
@@ -51,51 +34,56 @@
   </template>
   
   <script>
-  import { collection, getDocs, doc, setDoc } from "firebase/firestore";
-  import { db } from "@/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "@/firebase"; // Uvezi Firestore bazu
+
   export default {
     data() {
       return {
+        race: {
         name: "",
-        location: "",
         date: "",
+        location: "",
         description: "",
-        image: "",
-        defaultImage: require("@/assets/run.jpeg"),
+      },
       };
     },
     mounted() {
-      this.dovatiUtrku();
+      const raceId = this.$route.params.id; // Dohvati ID utrke iz rute
+      this.fetchRace(raceId); // Pozovi metodu za dohvaćanje podataka utrke
     },
     methods: {
-      async dovatiUtrku() {
-        const idUtrke = this.$route.params.id;
+      async fetchRace(id) {
         try {
-          const querySnapshot = await getDocs(collection(db, "races"));
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            if (doc.id == idUtrke) {
-              this.name = data.name;
-              this.location = data.location;
-              this.date = data.date;
-              this.description = data.description;
-              this.image = data.image || this.defaultImage;
-            }
-          });
+          const raceDoc = await getDoc(doc(db, "races", id)); // Dohvati dokument utrke
+        if (raceDoc.exists()) {
+          this.race = raceDoc.data(); // Postavi podatke utrke
+        } else {
+          console.log("No such document!");
+        }
         } catch (error) {
-          console.error("Greška prilikom dohvaćanja podataka o utrci:", error);
+          console.error("Error getting document:", error);
         }
       },
       async UrediPodatke() {
         const idUtrke = this.$route.params.id;
+
+        try {
+        // Ažuriraj podatke o utrci u Firestoreu
         await setDoc(doc(db, "races", idUtrke), {
-          name: this.name,
-          location: this.location,
-          date: this.date,
-          description: this.description,
-          image: this.image, // Ovdje će se prikazati default slika
+          name: this.race.name,
+          location: this.race.location,
+          date: this.race.date,
+          description: this.race.description,
         });
-        this.$router.replace("/prikaz-utrke/" + idUtrke);
+        console.log("Utrka uspješno ažurirana!");
+
+        // Preusmjeri korisnika na home
+        this.$router.push("/");
+      } catch (error) {
+        console.error("Greška prilikom ažuriranja podataka:", error);
+      }
+      
       },
     },
   };

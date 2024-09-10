@@ -6,7 +6,7 @@ import SignupView from "../views/SignupView.vue";
 import store from "@/store";
 import UserProfile from "@/views/UserProfileView.vue";
 import NewRace from "@/views/NewRaceView.vue";
-// import UrediUtrku from "@/views/UrediUtrku.vue";
+import UrediUtrku from "@/views/UrediUtrkuView.vue";
 
 const routes = [
     {
@@ -46,12 +46,12 @@ const routes = [
         component: NewRace,
         meta: { needsUser: true, adminOnly: true }, // Samo admini mogu pristupiti
     },
-    // {
-    //   path: "/uredi-utrku/:id",
-    //   name: "uredi-utrku",
-    //   component: UrediUtrku,
-    //   meta: { needsUser: true, adminOnly: true },
-    // },
+    {
+        path: "/uredi-utrku/:id",
+        name: "uredi-utrku",
+        component: UrediUtrku,
+        meta: { needsUser: true, adminOnly: true },
+    },
     {
         path: "/:catchAll(.*)",
         redirect: "/",

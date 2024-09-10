@@ -145,14 +145,15 @@
               {{ addedToFavorites ? "Makni iz favorita" : "Dodaj u favorite" }}
             </button>
 
-            <!-- Gumb za uređivanje utrke samo ako je korisnik admin
-            <button
+                       <!-- Gumb za uređivanje utrke samo ako je korisnik admin -->
+                       <button
               v-if="isAdmin"
               type="button"
               class="btn btn-warning"
               @click="IdiNaUredivanje(selectedRace)">
               Uredi utrku
-            </button> -->
+
+            </button>
 
             <button
               v-if="isAdmin"
@@ -339,12 +340,12 @@ export default {
         race.location.toLowerCase().includes(query)
       );
     },
-    // // Otvori stranicu za uređivanje utrke
-    // IdiNaUredivanje(race) {
-    //   this.$router.push(`/uredi-utrku/${race.id}`);
-    // },
+    // Otvori stranicu za uređivanje utrke
+    IdiNaUredivanje(race) {
+      this.$router.push(`/uredi-utrku/${race.id}`);
+    },
 
-    // Izbriši odabranu utrku
+        // Izbriši odabranu utrku
     async IzbrisiUtrku(race) {
       try {
         await deleteDoc(doc(db, "races", race.id));
