@@ -17,6 +17,14 @@
               type="text"
               v-model="race.description"
               placeholder="Opis utrke" />
+              
+            <select v-model="race.type">
+              <option disabled value="">Odaberi vrstu utrke</option>
+              <option>Marathon</option>
+              <option>Half Marathon</option>
+              <option>Trail</option>
+            </select>
+
             </v-col>
           </v-row>
           <v-row>
@@ -45,6 +53,7 @@ import { db } from "@/firebase"; // Uvezi Firestore bazu
         date: "",
         location: "",
         description: "",
+        type: "",
       },
       };
     },
@@ -78,6 +87,7 @@ import { db } from "@/firebase"; // Uvezi Firestore bazu
           location: this.race.location,
           date: this.race.date,
           description: this.race.description,
+          type: this.race.type,
         });
             // Obavijest korisniku
             alert("Utrka je uspješno uređena.");
