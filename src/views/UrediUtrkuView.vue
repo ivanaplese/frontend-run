@@ -2,10 +2,10 @@
     <v-app>
       <v-container>
         <h2 class="mb-4 pb-2 pb-md-0 mb-md-2 text-center">Uredi utrku</h2>
-        <v-form v-if="race.name">
-          <!-- Prikaži formu samo ako su podaci učitani -->
-          <v-row>
-           
+
+      <!-- Forma prikazana samo ako su podaci učitani -->
+      <v-form v-if="race.name" @submit.prevent="UrediPodatke">
+        <v-row>
             <v-col sm="6">
               <input type="text" v-model="race.name" placeholder="Naziv utrke" />
   
@@ -34,7 +34,7 @@
   </template>
   
   <script>
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase"; // Uvezi Firestore bazu
 
   export default {
@@ -49,15 +49,17 @@ import { db } from "@/firebase"; // Uvezi Firestore bazu
       };
     },
     mounted() {
-      const raceId = this.$route.params.id; // Dohvati ID utrke iz rute
-      this.fetchRace(raceId); // Pozovi metodu za dohvaćanje podataka utrke
+      const raceId = this.$route.params.id; // Dohvati ID iz rute
+      this.fetchRace(raceId); // Učitaj podatke utrke
     },
     methods: {
+          // Metoda za dohvaćanje podataka utrke
       async fetchRace(id) {
         try {
           const raceDoc = await getDoc(doc(db, "races", id)); // Dohvati dokument utrke
         if (raceDoc.exists()) {
           this.race = raceDoc.data(); // Postavi podatke utrke
+          this.race.id = id; // Dodaj ID u race objekt
         } else {
           console.log("No such document!");
         }
@@ -65,23 +67,26 @@ import { db } from "@/firebase"; // Uvezi Firestore bazu
           console.error("Error getting document:", error);
         }
       },
-      async UrediPodatke() {
-        const idUtrke = this.$route.params.id;
+    // Metoda za uređivanje podataka utrke
+    async UrediPodatke() {
 
         try {
         // Ažuriraj podatke o utrci u Firestoreu
-        await setDoc(doc(db, "races", idUtrke), {
+        // Ažuriranje dokumenta s novim podacima
+        await updateDoc(doc(db, "races", this.race.id), {
           name: this.race.name,
           location: this.race.location,
           date: this.race.date,
           description: this.race.description,
         });
-        console.log("Utrka uspješno ažurirana!");
+            // Obavijest korisniku
+            alert("Utrka je uspješno uređena.");
 
         // Preusmjeri korisnika na home
-        this.$router.push("/");
+        // Nakon uspješnog ažuriranja, možeš preusmjeriti korisnika
+        this.$router.push("/races"); // Primjer preusmjeravanja na listu utrka
       } catch (error) {
-        console.error("Greška prilikom ažuriranja podataka:", error);
+        console.error("Greška prilikom ažuriranja utrke:", error);
       }
       
       },
