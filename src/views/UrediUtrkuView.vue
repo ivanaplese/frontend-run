@@ -12,11 +12,6 @@
               <input type="text" v-model="race.location" placeholder="Lokacija" />
 
               <input type="date" v-model="race.date" placeholder="Datum utrke" />
-  
-              <input
-              type="text"
-              v-model="race.description"
-              placeholder="Opis utrke" />
               
             <select v-model="race.type">
               <option disabled value="">Odaberi vrstu utrke</option>
@@ -25,6 +20,11 @@
               <option>Trail</option>
             </select>
 
+            
+            <input
+              type="text"
+              v-model="race.description"
+              placeholder="Opis utrke" />
             </v-col>
           </v-row>
           <v-row>
