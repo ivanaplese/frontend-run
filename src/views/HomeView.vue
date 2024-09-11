@@ -388,4 +388,12 @@ export default {
   max-width: 600px;
   margin: auto;
 }
+.card-title a {
+  color: rgb(255, 132, 0)!important;
+  text-decoration: none;
+  font-weight: bold;
+}
+.card-title a:hover {
+  color: black !important;
+}
 </style>
