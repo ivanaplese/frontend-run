@@ -38,8 +38,7 @@
           type="text"
           id="imageUrl"
           v-model="newRaceImage"
-          placeholder="Enter image URL"
-          required />
+          placeholder="Enter image URL" />
       </div>
 
 
@@ -50,7 +49,7 @@
   
   <script>
   import { db, collection, addDoc } from "@/firebase.js";
-import runImage from "@/assets/run.jpeg";
+  import defaultImage from "@/assets/run.jpeg";
 
   export default {
   name: "NewRace",
@@ -68,6 +67,9 @@ import runImage from "@/assets/run.jpeg";
     methods: {
   
     async postNewRace() {
+      if (!this.newRaceImage || this.newRaceImage.trim() === "") {
+        this.newRaceImage = defaultImage;
+      }
 
       try {
         await addDoc(collection(db, "races"), {
