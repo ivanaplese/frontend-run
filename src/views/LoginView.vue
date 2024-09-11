@@ -67,9 +67,8 @@ export default {
         })
         .catch((e) => {
           console.error("Greška!", e);
-          alert(
-            "Došlo je do greške prilikom prijave. Molimo pokušajte ponovo."
-          );
+          alert("Netočan email ili lozinka. Molimo pokušajte ponovo.");
+          (this.email = ""), (this.password = "");
         });
     },
   },

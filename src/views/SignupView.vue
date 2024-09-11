@@ -149,6 +149,7 @@ export default {
         console.error("Došlo je do greške", error);
         if (this.password.length < 6) {
           alert("Lozinka mora imati najmanje 6 znakova.");
+          (this.password = ""), (this.passwordRepeat = "");
         } else {
           alert("Registracija nije uspjela. Pokušajte ponovo.");
         }
