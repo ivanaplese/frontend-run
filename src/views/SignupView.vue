@@ -95,13 +95,14 @@
 
 <script>
 
-import { auth } from "@/firebase.js";
+import { auth, db } from "@/firebase.js";
 
 import {
   createUserWithEmailAndPassword,
   signOut,
   updateProfile,
 } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
 
 export default {
   name: "SignupView",
@@ -115,52 +116,45 @@ export default {
       email: "",
       password: "",
       passwordRepeat: "",
+      isAdmin: "",
     };
   },
   methods: {
-    signup() {
+    async signup() {
       if (this.password !== this.passwordRepeat) {
         alert("Lozinke se ne poklapaju!");
         return;
       }
       // Kreiranje korisničkog profila
-      createUserWithEmailAndPassword(auth, this.email, this.password)
-      .then((userCredential) => {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          this.email,
+          this.password
+        );
         const user = userCredential.user;
-        return updateProfile(user, {
-            displayName: `${this.firstName} ${this.lastName}`,
-          }).then(() => {
-            return setDoc(doc(db, "users", user.uid), {
-              email: user.email,
-              firstName: this.firstName,
-              lastName: this.lastName,
-              isAdmin: false,
-            });
-          });
-        })
-        .then(() => {
-          alert("Uspješna registracija. Molimo, prijavite se.");
-      // Odjavljivanje korisnika nakon registracije
-      return signOut(auth);
-        })
-        .then(() => {
-
-          // Preusmeravanje korisnika na login stranicu
-          this.$router.push("/login");
-        })
-        .catch((error) => {
-          console.error("Došlo je do greške", error);
-          if (this.password.length < 6) {
-            alert("Lozinka mora imati najmanje 6 znakova.");
-          } else {
-            alert("Registracija nije uspjela. Pokušajte ponovo.");
-          }
-          console.error("Došlo je do greške", error);
+        await updateProfile(user, {
+          displayName: `${this.firstName} ${this.lastName}`,
         });
-     
+        await setDoc(doc(db, "users", user.uid), {
+          email: user.email,
+          firstName: this.firstName,
+          lastName: this.lastName,
+          isAdmin: false,
+        });
+        alert("Uspješna registracija. Molimo, prijavite se.");
+        await signOut(auth);
+        this.$router.push("/login");
+      } catch (error) {
+        console.error("Došlo je do greške", error);
+        if (this.password.length < 6) {
+          alert("Lozinka mora imati najmanje 6 znakova.");
+        } else {
+          alert("Registracija nije uspjela. Pokušajte ponovo.");
+        }
+      }
     },
   },
-  
 };
 
 </script>
