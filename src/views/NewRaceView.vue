@@ -33,8 +33,13 @@
 
         
       <div>
-        <label for="image">Race Image:</label>
-        <input type="file" id="image" @change="onImageSelected" />
+        <label for="imageUrl">Race Image URL:</label>
+        <input
+          type="text"
+          id="imageUrl"
+          v-model="newRaceImage"
+          placeholder="Enter image URL"
+          required />
       </div>
 
 
@@ -62,41 +67,33 @@ import runImage from "@/assets/run.jpeg";
 
     methods: {
   
-      onImageSelected(event) {
-      this.newRaceImage = event.target.files[0];
-    },
     async postNewRace() {
-      const raceData = {
+
+      try {
+        await addDoc(collection(db, "races"), {
           name: this.newRaceName,
           type: this.newRaceType,
           date: this.newRaceDate,
           location: this.newRaceLocation,
           description: this.newRaceDescription,
-        };
-      if (!this.newRaceImage) {
-        raceData.image = runImage;
-      } else {
-        raceData.image = URL.createObjectURL(this.newRaceImage);
-      }
-      try {
-        const docRef = await addDoc(collection(db, "races"), raceData);
-        console.log("Document written with ID: ", docRef.id);
-        this.resetForm();
-        alert("Utrka je uspješno dodana.");
+          image: this.newRaceImage,
+        });
+        alert("New race added successfully!");
+        this.clearForm();
+
         this.$router.push({ name: "home" });
       } catch (error) {
-        console.error("Error adding document: ", error);
-        alert("Greška:", error);
+        console.error("Error adding race:", error);
+        alert("There was an error adding the race.");
       }
     },
-    resetForm() {
+    clearForm() {
       this.newRaceName = "";
       this.newRaceType = "";
       this.newRaceDate = "";
       this.newRaceLocation = "";
       this.newRaceDescription = "";
-      this.newRaceImage = null;
-      document.getElementById("image").value = "";
+      this.newRaceImage = "";
     },
   },
 };
