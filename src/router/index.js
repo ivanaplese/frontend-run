@@ -7,6 +7,7 @@ import store from "@/store";
 import UserProfile from "@/views/UserProfileView.vue";
 import NewRace from "@/views/NewRaceView.vue";
 import UrediUtrku from "@/views/UrediUtrkuView.vue";
+import FavoritesView from "../views/FavoritesView.vue";
 
 const routes = [
     {
@@ -21,6 +22,12 @@ const routes = [
         name: "about",
         component: AboutView,
         meta: { needsUser: false },
+    },
+    {
+        path: "/favorites",
+        name: "favorites",
+        component: FavoritesView,
+        meta: { needsUser: true },
     },
     {
         path: '/login',
