@@ -142,7 +142,7 @@
                   ? handleRemoveFromFavorites()
                   : handleAddToFavorites()
               ">
-              {{ addedToFavorites ? "Makni iz favorita" : "Dodaj u favorite" }}
+              {{ addedToFavorites ? "Ukloni iz favorita" : "Dodaj u favorite" }}
             </button>
 
                        <!-- Gumb za uređivanje utrke samo ako je korisnik admin -->
