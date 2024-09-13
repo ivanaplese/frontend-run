@@ -65,12 +65,10 @@
     },
 
     methods: {
-  
     async postNewRace() {
       if (!this.newRaceImage || this.newRaceImage.trim() === "") {
         this.newRaceImage = defaultImage;
       }
-
       try {
         await addDoc(collection(db, "races"), {
           name: this.newRaceName,
@@ -88,6 +86,8 @@
         console.error("Error adding race:", error);
         alert("There was an error adding the race.");
       }
+
+      
     },
     clearForm() {
       this.newRaceName = "";

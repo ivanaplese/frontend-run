@@ -145,15 +145,14 @@
               {{ addedToFavorites ? "Ukloni iz favorita" : "Dodaj u favorite" }}
             </button>
 
-                       <!-- Gumb za uređivanje utrke samo ako je korisnik admin -->
-                       <button
-              v-if="isAdmin"
-              type="button"
-              class="btn btn-warning"
-              @click="IdiNaUredivanje(selectedRace)">
-              Uredi utrku
 
-            </button>
+<button
+  v-if="isAdmin"
+  type="button"
+  class="btn btn-warning"
+  @click="IdiNaUredivanje(selectedRace)">
+  Uredi utrku
+   </button>
 
             <button
               v-if="isAdmin"
@@ -345,13 +344,13 @@ export default {
       this.$router.push(`/uredi-utrku/${race.id}`);
     },
 
-        // Izbriši odabranu utrku
+  
     async IzbrisiUtrku(race) {
       try {
         await deleteDoc(doc(db, "races", race.id));
-        this.selectedRace = null; // Zatvori modalni prozor nakon brisanja
+        this.selectedRace = null; 
         alert("Utrka je uspješno izbrisana.");
-        this.getPosts(); // Osvježi listu utrka
+        this.getPosts(); 
       } catch (error) {
         console.error("Greška prilikom brisanja utrke:", error);
       }
