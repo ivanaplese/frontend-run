@@ -2,8 +2,7 @@
     <v-app>
       <v-container>
         <h2 class="mb-4 pb-2 pb-md-0 mb-md-2 text-center">Uredi utrku</h2>
-
-      <!-- Forma prikazana samo ako su podaci učitani -->
+        
       <v-form v-if="race.name" @submit.prevent="UrediPodatke">
         <v-row>
             <v-col sm="6">
@@ -43,7 +42,7 @@
   
   <script>
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "@/firebase"; // Uvezi Firestore bazu
+import { db } from "@/firebase"; 
 
   export default {
     data() {
@@ -58,17 +57,16 @@ import { db } from "@/firebase"; // Uvezi Firestore bazu
       };
     },
     mounted() {
-      const raceId = this.$route.params.id; // Dohvati ID iz rute
-      this.fetchRace(raceId); // Učitaj podatke utrke
+      const raceId = this.$route.params.id; 
+      this.fetchRace(raceId); 
     },
     methods: {
-          // Metoda za dohvaćanje podataka utrke
       async fetchRace(id) {
         try {
-          const raceDoc = await getDoc(doc(db, "races", id)); // Dohvati dokument utrke
+          const raceDoc = await getDoc(doc(db, "races", id)); 
         if (raceDoc.exists()) {
-          this.race = raceDoc.data(); // Postavi podatke utrke
-          this.race.id = id; // Dodaj ID u race objekt
+          this.race = raceDoc.data(); 
+          this.race.id = id; 
         } else {
           console.log("No such document!");
         }
@@ -76,12 +74,10 @@ import { db } from "@/firebase"; // Uvezi Firestore bazu
           console.error("Error getting document:", error);
         }
       },
-    // Metoda za uređivanje podataka utrke
+    
     async UrediPodatke() {
 
         try {
-        // Ažuriraj podatke o utrci u Firestoreu
-        // Ažuriranje dokumenta s novim podacima
         await updateDoc(doc(db, "races", this.race.id), {
           name: this.race.name,
           location: this.race.location,
@@ -89,12 +85,10 @@ import { db } from "@/firebase"; // Uvezi Firestore bazu
           description: this.race.description,
           type: this.race.type,
         });
-            // Obavijest korisniku
             alert("Utrka je uspješno uređena.");
 
-        // Preusmjeri korisnika na home
-        // Nakon uspješnog ažuriranja, možeš preusmjeriti korisnika
-        this.$router.push("/races"); // Primjer preusmjeravanja na listu utrka
+  
+        this.$router.push("/races"); 
       } catch (error) {
         console.error("Greška prilikom ažuriranja utrke:", error);
       }

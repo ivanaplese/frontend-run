@@ -339,7 +339,7 @@ export default {
         race.location.toLowerCase().includes(query)
       );
     },
-    // Otvori stranicu za uređivanje utrke
+
     IdiNaUredivanje(race) {
       this.$router.push(`/uredi-utrku/${race.id}`);
     },

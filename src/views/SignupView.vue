@@ -125,7 +125,6 @@ export default {
         alert("Lozinke se ne poklapaju!");
         return;
       }
-      // Kreiranje korisničkog profila
       try {
         const userCredential = await createUserWithEmailAndPassword(
           auth,
