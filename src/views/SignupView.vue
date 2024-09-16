@@ -13,7 +13,7 @@
               id="inputFirstName"
               placeholder="Enter your first name"
                 v-model="firstName"
-              required />
+              required /> //Svaki ulazni element koristi v-model za dvosmjernu vezu između vrijednosti unosa i podataka u Vue instanci.
           </div>
           <div class="col-md-6 mb-3">
             <label for="inputLastName" class="form-label">Last Name</label>
@@ -96,7 +96,6 @@
 <script>
 
 import { auth, db } from "@/firebase.js";
-
 import {
   createUserWithEmailAndPassword,
   signOut,
@@ -107,7 +106,7 @@ import { setDoc, doc } from "firebase/firestore";
 export default {
   name: "SignupView",
 
-  data() {
+  data() { //definira koje ce sve podatke komponenta koristit
     return {
       firstName: "",
       lastName: "",

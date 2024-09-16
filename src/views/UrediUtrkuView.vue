@@ -3,6 +3,7 @@
       <v-container>
         <h2 class="mb-4 pb-2 pb-md-0 mb-md-2 text-center">Uredi utrku</h2>
         
+          <!-- Prikaz forme samo ako utrka ima ime, tj. podatke su učitani -->
       <v-form v-if="race.name" @submit.prevent="UrediPodatke">
         <v-row>
             <v-col sm="6">
@@ -17,7 +18,10 @@
               <option>Marathon</option>
               <option>Half Marathon</option>
               <option>Trail</option>
-            </select>
+            </select> 
+            
+            <!-- Dvostruka veza između unosa korisnika i podataka o utrci
+            Svaka promjena u formi odmah ažurira odgovarajuće polje u objektu race. -->
 
             
             <input
@@ -57,8 +61,8 @@ import { db } from "@/firebase";
       };
     },
     mounted() {
-      const raceId = this.$route.params.id; 
-      this.fetchRace(raceId); 
+      const raceId = this.$route.params.id; //dohvat ida utrke
+      this.fetchRace(raceId);  // Poziv funkcije za dohvat podataka o utrci
     },
     methods: {
       async fetchRace(id) {
@@ -97,3 +101,73 @@ import { db } from "@/firebase";
     },
   };
   </script>
+<style scoped>
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+input[type="text"], input[type="date"], textarea {
+  background-color: #fff;
+}
+
+input[type="text"]:focus, input[type="date"]:focus, textarea:focus {
+  border-color: #f58634;
+  outline: none;
+}
+
+v-btn {
+  background-color: #f58634;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+v-btn:hover {
+  background-color: #d97329;
+}
+
+.v-form {
+  margin-top: 20px;
+}
+
+.v-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.v-col {
+  flex: 1;
+  padding: 10px;
+  min-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .v-col {
+    width: 100%;
+    padding: 5px;
+  }
+}
+</style>

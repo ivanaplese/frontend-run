@@ -104,7 +104,7 @@ export default {
     },
   },
   created() {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, (user) => { //prati se stanje autentifikacije
       if (user) {
         store.currentUser = user.email;
         this.currentUser = store.currentUser;
@@ -156,3 +156,6 @@ export default {
   }
 }
 </style>
+
+<!-- app vue sluzi za glavnu navigaciju aplikacijom, i autentifikaciju putem firebasea
+ima prilagdene rute ovisno u current user i glogbalno stanje store i integrirane rute -->
