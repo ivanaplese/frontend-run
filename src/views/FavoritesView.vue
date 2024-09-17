@@ -5,6 +5,7 @@
         <li v-for="race in favorites" :key="race.id">
           {{ race.name }} - {{ race.location }}
         </li>
+        <!-- v for za iteriranje, key jedinstveni identifikator za azuriranje promjena -->
       </ul>
     </div>
   </template>

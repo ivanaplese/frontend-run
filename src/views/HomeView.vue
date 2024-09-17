@@ -20,8 +20,9 @@
       <h4 class="mb-3">Marathons</h4>
       <div
         v-for="marathon in filteredMarathons.slice(0, 6)"
-        :key="marathon.id"
+    :key="marathon.id"     
         class="col-md-4">
+        <!--  key se koristi za identifikaciju svakog elementa u petlji v for -->
         <div class="card">
           <img :src="marathon.image" class="card-img-top" alt="Race image" />
           <div class="card-body">
@@ -184,6 +185,7 @@ export default {
       isAdmin: store.isAdmin,
     };
   },
+  //racunate vrijednosti, computed sluzi za pisanje funkcija koje su za obradu ili filtriranje podataka
   computed: {
     marathons() {
       return this.races.filter((race) => race.type === "Marathon");
@@ -204,11 +206,13 @@ export default {
       return this.trails.filter((race) => this.matchesSearch(race));
     },
   },
+  //lifecycle hook, određuje kad točno će se nešto prikazati iz firestore na ekranu
   mounted() {
     this.currentUser = store.currentUser;
     this.getPosts();
     this.isAdmin = store.isAdmin;
   },
+  //u metode idu sve funkcije koje bi mogli htjeti pozivati u indxu
   methods: {
     showDetails(race) {
       this.selectedRace = race;

@@ -20,14 +20,17 @@
           v-model="displayName"
           class="form-control" />
       </div>
-  
+
+      <!-- Input polja za email, ime, prezime i lozinke koriste v-model za dvosmjerno vezivanje podataka između polja i Vue instance. -->
+      
       <button @click="updateProfile" class="btn btn-primary">
         Update Profile
       </button>
 
+      <!-- Gumbi pokreću metode updateProfile (ažuriranje 
+       profila) i changePassword (promjena lozinke). -->
 
 <h2 class="mt-4">User Settings</h2>
-
 
 <div class="form-group">
   <label for="currentPassword">Current Password:</label>
@@ -117,7 +120,7 @@
           user.email,
           this.currentPassword
         );
-        await reauthenticateWithCredential(user, credential);
+        await reauthenticateWithCredential(user, credential); //Prvo ponovno autentificira korisnika pomoću trenutne lozinke prije promjene lozinke.
         await updatePassword(user, this.newPassword);
         alert("Password successfully changed.");
         this.currentPassword = "";
