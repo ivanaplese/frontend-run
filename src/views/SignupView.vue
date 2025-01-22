@@ -1,6 +1,7 @@
 <template>
   <div
-    class="signup-container d-flex align-items-center justify-content-center min-vh-100">
+  class="signup-container d-flex align-items-center justify-content-center min-vh-100"
+  >
     <div class="signup-content p-5 shadow-lg rounded">
       <h2 class="text-center mb-4">Create an Account</h2>
       <form>
@@ -12,9 +13,10 @@
               class="form-control"
               id="inputFirstName"
               placeholder="Enter your first name"
-                v-model="firstName"
-              required /> 
-              <!-- Svaki ulazni element koristi v-model za dvosmjernu vezu između vrijednosti unosa i podataka u Vue instanci. -->
+              v-model="firstName"
+              required
+            />
+            <!-- Svaki ulazni element koristi v-model za dvosmjernu vezu između vrijednosti unosa i podataka u Vue instanci. -->
           </div>
           <div class="col-md-6 mb-3">
             <label for="inputLastName" class="form-label">Last Name</label>
@@ -23,8 +25,9 @@
               class="form-control"
               id="inputLastName"
               placeholder="Enter your last name"
-               v-model="lastName"
-              required />
+              v-model="lastName"
+              required
+            />
           </div>
         </div>
         <div class="mb-3">
@@ -33,8 +36,9 @@
             type="date"
             class="form-control"
             id="inputBirthDate"
-             v-model="birthDate"
-            required />
+            v-model="birthDate"
+            required
+          />
         </div>
         <div class="mb-3">
           <label for="inputUsername" class="form-label">Username</label>
@@ -44,7 +48,8 @@
             id="inputUsername"
             placeholder="Enter your username"
             v-model="userName"
-            required />
+            required
+          />
         </div>
         <div class="mb-3">
           <label for="inputEmail" class="form-label">Email address</label>
@@ -54,7 +59,8 @@
             id="inputEmail"
             placeholder="Enter your email"
             v-model="email"
-            required />
+            required
+          />
         </div>
         <div class="row">
           <div class="col-md-6 mb-3">
@@ -65,7 +71,8 @@
               id="inputPassword"
               placeholder="Enter your password"
               v-model="password"
-              required />
+              required
+              />
           </div>
           <div class="col-md-6 mb-3">
             <label for="inputConfirmPassword" class="form-label"
@@ -76,8 +83,9 @@
               class="form-control"
               id="inputConfirmPassword"
               placeholder="Confirm your password"
-               v-model="passwordRepeat"
-              required />
+              v-model="passwordRepeat"
+              required
+            />
           </div>
         </div>
         <button type="button" @click="signup" class="btn btn-primary w-100">
@@ -96,18 +104,15 @@
 
 <script>
 
-import { auth, db } from "@/firebase.js";
-import {
-  createUserWithEmailAndPassword,
-  signOut,
-  updateProfile,
-} from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
+import api from "@/connection.js";
+import axios from "axios";
+import { currentUser } from "@/store.js";
 
 export default {
   name: "SignupView",
 
-  data() { //definira koje ce sve podatke komponenta koristit
+  data() {
+    //definira koje ce sve podatke komponenta koristit
     return {
       firstName: "",
       lastName: "",
@@ -126,23 +131,18 @@ export default {
         return;
       }
       try {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          this.email,
-          this.password
-        );
-        const user = userCredential.user;
-        await updateProfile(user, {
-          displayName: `${this.firstName} ${this.lastName}`,
-        });
-        await setDoc(doc(db, "users", user.uid), {
-          email: user.email,
+        const newUser = {
           firstName: this.firstName,
           lastName: this.lastName,
-          isAdmin: false,
-        });
+          phoneNumber: this.phoneNumber,
+          email: this.email,
+          password: this.password,
+          birthDate: this.birthDate,
+        };
+        const response = await api.post("/guests", newUser);
+        console.log("Registracija uspiješna");
         alert("Uspješna registracija. Molimo, prijavite se.");
-        await signOut(auth);
+
         this.$router.push("/login");
       } catch (error) {
         console.error("Došlo je do greške", error);
