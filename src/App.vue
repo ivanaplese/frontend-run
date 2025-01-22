@@ -11,7 +11,8 @@
           data-bs-target="#navbarNav"
           aria-controls="navbarNav"
           aria-expanded="false"
-          aria-label="Toggle navigation">
+          aria-label="Toggle navigation"
+          >
           <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -25,7 +26,9 @@
                 <router-link to="/about" class="nav-link">About</router-link>
               </li>
               <li class="nav-item" v-if="currentUser">
-                <router-link to="/favorites" class="nav-link">Favorites</router-link>
+                <router-link to="/favorites" class="nav-link"
+                  >Favorites</router-link
+                >
               </li>
             </ul>
           </div>
@@ -37,13 +40,15 @@
                 id="userDropdown"
                 role="button"
                 data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Pozdrav, 
+                aria-expanded="false"
+              >
+                Pozdrav,
                 {{ currentUser }}
               </a>
               <ul
                 class="dropdown-menu dropdown-menu-end"
-                aria-labelledby="userDropdown">
+                aria-labelledby="userDropdown"
+              >
                 <li>
                   <router-link to="/profile" class="dropdown-item"
                     >Profil</router-link
@@ -53,7 +58,8 @@
                   <router-link
                     to="/newraces"
                     class="dropdown-item"
-                    v-if="isAdmin">
+                    v-if="isAdmin"
+                  >
                     Dodaj novu utrku</router-link
                   >
                 </li>
@@ -69,7 +75,6 @@
             <li class="nav-item" v-if="!currentUser">
               <router-link to="/signup" class="nav-link">Signup</router-link>
             </li>
-
           </ul>
         </div>
       </div>
@@ -103,23 +108,7 @@ export default {
         });
     },
   },
-  created() {
-    onAuthStateChanged(auth, (user) => { //prati se stanje autentifikacije
-      if (user) {
-        store.currentUser = user.email;
-        this.currentUser = store.currentUser;
-        if (this.$route.name === "login" || this.$route.name === "signup") {
-          this.$router.push({ name: "home" });
-        }
-      } else {
-        store.currentUser = null;
-        this.currentUser = null;
-          if (this.$route.meta.needsUser) {
-          this.$router.push({ name: "login" });
-        }
-      }
-    });
-  },
+  
   computed: {
     isAdmin() {
       return store.isAdmin;
@@ -127,7 +116,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss">
 #app {
