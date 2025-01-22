@@ -1,11 +1,12 @@
 <template>
   <div
-    class="login-container d-flex align-items-center justify-content-center min-vh-100">
+  class="login-container d-flex align-items-center justify-content-center min-vh-100"
+  >
     <div class="login-content d-flex flex-row shadow-lg">
       <div class="welcome-section p-5 d-none d-md-block">
         <h1>Login to <span class="brand">run!</span></h1>
         <p>If you don’t have an account</p>
-               <p>
+        <p>
           You can
           <router-link to="/signup" class="signup-link"
             >Sign up here!</router-link
@@ -21,15 +22,17 @@
               v-model="email"
               class="form-control custom-input"
               id="email"
-              placeholder="Enter email" />
+              placeholder="Enter email"
+            />
           </div>
           <div class="mb-4 position-relative">
             <input
               type="password"
-               v-model="password"
+              v-model="password"
               class="form-control custom-input"
               id="password"
-              placeholder="Password" />
+              placeholder="Password"
+            />
             <span class="password-toggle position-absolute"
               ><i class="bi bi-eye"></i
             ></span>
@@ -37,7 +40,8 @@
           <button
             type="button"
             @click="login()"
-            class="btn btn-primary custom-btn w-100">
+            class="btn btn-primary custom-btn w-100"
+          >
             Login
           </button>
         </form>
@@ -47,33 +51,83 @@
 </template>
 
 <script>
-import { auth } from "@/firebase.js";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import store from "@/store";
+import api from "@/connection";
+
 export default {
-  name: "login",
+  name: "Login",
   data() {
     return {
       email: "",
       password: "",
+      errorMessage: "",
     };
   },
   methods: {
-    login() {
-      console.log("Login..." + this.email);
-      signInWithEmailAndPassword(auth, this.email, this.password)
-        .then((result) => {
-          console.log("Uspješna prijava.", result);
-          this.$router.push("/");
-        })
-        .catch((e) => {
-          console.error("Greška!", e);
-          alert("Netočan email ili lozinka. Molimo pokušajte ponovo.");
-          (this.email = ""), (this.password = "");
-        });
+    async login() {
+      try {
+        // Initialize userType and userData
+        let userType = "";
+        let userData;
+        // Try to get guest data
+        try {
+          userData = await api.get(`/guest/email/${this.email}`);
+          userType = "guest";
+        } catch (guestError) {
+          // If not found as guest, check for admin
+          try {
+            userData = await api.get(`/admin/email/${this.email}`);
+            userType = "admin";
+          } catch (adminError) {
+            throw new Error("Email not found as guest or admin");
+          }
+        }
+        // Authenticate based on userType
+        let authResponse;
+        if (userType === "guest") {
+          authResponse = await api.post("/auth", {
+            email: this.email,
+            password: this.password,
+          });
+          console.log("Login successful", authResponse.data.token);
+        } else if (userType === "admin") {
+          authResponse = await api.post("/authAdmin", {
+            email: this.email,
+            password: this.password,
+          });
+          console.log("Login successful", authResponse.data.token);
+        }
+        // On successful login, save the token and user data
+        console.log("Login successful", authResponse.data.token);
+        store.saveToken(authResponse.data.token);
+        if (!store.currentUser) {
+          store.currentUser = {
+            id: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+          }; // Initialize the user object if it is null
+        }
+        // Store the user data (guest or admin)
+        Object.assign(store.currentUser, userData.data);
+        // Redirect the user to the home page
+        this.$router.push("/");
+      } catch (error) {
+        // Handle different error cases
+        if (error.message === "Email not found as guest or admin") {
+          this.errorMessage = "Email nije pronađen kao gost ili administrator.";
+        } else {
+          this.errorMessage =
+            "Krivo ste upisali email ili lozinku. Molimo pokušajte ponovno.";
+        }
+        console.error("Login error:", error);
+      }
     },
   },
 };
 </script>
+
 
 <style scoped>
 .login-container {
