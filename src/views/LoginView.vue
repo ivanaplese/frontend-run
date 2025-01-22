@@ -90,6 +90,7 @@ export default {
             password: this.password,
           });
           console.log("Login successful", authResponse.data.token);
+          console.log(authResponse.data);
         } else if (userType === "admin") {
           authResponse = await api.post("/authAdmin", {
             email: this.email,
@@ -109,8 +110,12 @@ export default {
             password: "",
           }; // Initialize the user object if it is null
         }
+
+
         // Store the user data (guest or admin)
         Object.assign(store.currentUser, userData.data);
+
+        console.log(store.currentUser);
         // Redirect the user to the home page
         this.$router.push("/");
       } catch (error) {

@@ -25,7 +25,7 @@
               <li class="nav-item">
                 <router-link to="/about" class="nav-link">About</router-link>
               </li>
-              <li class="nav-item" v-if="currentUser">
+              <li class="nav-item" v-if="isLogedIn">
                 <router-link to="/favorites" class="nav-link"
                   >Favorites</router-link
                 >
@@ -33,7 +33,7 @@
             </ul>
           </div>
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item dropdown" v-if="currentUser">
+            <li class="nav-item dropdown" v-if="isLogedIn">
               <a
                 class="nav-link dropdown-toggle"
                 href="#"
@@ -43,7 +43,7 @@
                 aria-expanded="false"
               >
                 Pozdrav,
-                {{ currentUser }}
+                {{ currentUser.username }}
               </a>
               <ul
                 class="dropdown-menu dropdown-menu-end"
@@ -69,10 +69,10 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-item" v-if="!currentUser">
+            <li class="nav-item" v-if="!isLogedIn">
               <router-link to="/login" class="nav-link">Login</router-link>
             </li>
-            <li class="nav-item" v-if="!currentUser">
+            <li class="nav-item" v-if="!isLogedIn">
               <router-link to="/signup" class="nav-link">Signup</router-link>
             </li>
           </ul>
@@ -84,8 +84,6 @@
 </template>
 
 <script>
-import { auth } from "@/firebase.js";
-import { onAuthStateChanged, signOut } from "firebase/auth";
 import store from "@/store";
 export default {
   name: "App",
@@ -97,19 +95,19 @@ export default {
   },
   methods: {
     logout() {
-      signOut(auth)
-        .then(() => {
-          console.log("Korisnik je uspješno odjavljen.");
-          store.currentUser = null;
-          this.$router.push("/login");
-        })
-        .catch((error) => {
-          console.error("Greška prilikom odjavljivanja:", error);
-        });
+      store.clearToken();
+      console.log("Uspiješno ste odjavljeni");
+      this.$router.push("/");
     },
   },
   
   computed: {
+    isLogedIn() {
+      return store.state.token !== null;
+    },
+    currentUser() {
+      return store.currentUser; // Reactive binding
+    },
     isAdmin() {
       return store.isAdmin;
     },
