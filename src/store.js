@@ -3,20 +3,21 @@ import { reactive } from "vue";
 const state = reactive({
     token: localStorage.getItem("token") || null,
 });
-// Funkcija za pohranu tokena
+
+var currentUser = reactive({
+    id: "",
+    username: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+});
 
 
 export default {
     searchTerm: "",
     isAdmin: false,
-    currentUser: {
-        id: "",
-        username: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-    },
+    currentUser,
     state, // Izvozimo state koji je sada reaktivan
     saveToken(token) {
         localStorage.setItem("token", token);

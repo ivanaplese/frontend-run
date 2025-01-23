@@ -66,51 +66,28 @@ export default {
   methods: {
     async login() {
       try {
-        // Initialize userType and userData
-        let userType = "";
-        let userData;
-        // Try to get guest data
-        try {
-          userData = await api.get(`/guest/email/${this.email}`);
-          userType = "guest";
-        } catch (guestError) {
-          // If not found as guest, check for admin
-          try {
-            userData = await api.get(`/admin/email/${this.email}`);
-            userType = "admin";
-          } catch (adminError) {
-            throw new Error("Email not found as guest or admin");
-          }
-        }
-        // Authenticate based on userType
-        let authResponse;
-        if (userType === "guest") {
-          authResponse = await api.post("/auth", {
-            email: this.email,
-            password: this.password,
-          });
-          console.log("Login successful", authResponse.data.token);
-          console.log(authResponse.data);
-        } else if (userType === "admin") {
-          authResponse = await api.post("/authAdmin", {
-            email: this.email,
-            password: this.password,
-          });
-          console.log("Login successful", authResponse.data.token);
-        }
+       
+        const authResponse = await api.post("/authAdmin", {
+          email: this.email,
+          password: this.password,
+        });
+
         // On successful login, save the token and user data
         console.log("Login successful", authResponse.data.token);
         store.saveToken(authResponse.data.token);
         if (!store.currentUser) {
           store.currentUser = {
             id: "",
+            username: "",
             firstName: "",
             lastName: "",
             email: "",
             password: "",
           }; // Initialize the user object if it is null
         }
-
+        
+        const userData = await api.get(`/admin/email/${this.email}`);
+        console.log(userData);
 
         // Store the user data (guest or admin)
         Object.assign(store.currentUser, userData.data);

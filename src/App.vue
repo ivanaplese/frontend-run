@@ -89,7 +89,6 @@ export default {
   name: "App",
   data() {
     return {
-      currentUser: null,
       isAdmin: false,
     };
   },
@@ -106,11 +105,10 @@ export default {
       return store.state.token !== null;
     },
     currentUser() {
+      console.log(store.currentUser);
       return store.currentUser; // Reactive binding
     },
-    isAdmin() {
-      return store.isAdmin;
-    },
+
   },
 };
 </script>

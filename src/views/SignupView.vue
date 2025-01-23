@@ -134,12 +134,13 @@ export default {
         const newUser = {
           firstName: this.firstName,
           lastName: this.lastName,
+          username: this.userName,
           phoneNumber: this.phoneNumber,
           email: this.email,
           password: this.password,
           birthDate: this.birthDate,
         };
-        const response = await api.post("/guests", newUser);
+        const response = await api.post("/admins", newUser);
         console.log("Registracija uspiješna");
         alert("Uspješna registracija. Molimo, prijavite se.");
 
