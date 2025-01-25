@@ -50,6 +50,8 @@
 <script>
 import { db, collection, addDoc } from "@/firebase.js";
 import defaultImage from "@/assets/run.jpeg";
+import api from "@/connection";
+import store from "@/store";
 
 export default {
   name: "NewRace",
@@ -70,18 +72,16 @@ export default {
         this.newRaceImage = defaultImage;
       }
       try {
-        await addDoc(collection(db, "races"), {
-          name: this.newRaceName,
-          type: this.newRaceType,
-          date: this.newRaceDate,
-          location: this.newRaceLocation,
-          description: this.newRaceDescription,
-          image: this.newRaceImage,
+        const newRace = await api.post("/race", {
+          naziv: this.newRaceName,
+          vrsta: this.newRaceType,
+          datum: this.newRaceDate,
+          loacija: this.newRaceLocation,
+          opis: this.newRaceDescription,
         });
-        alert("New race added successfully!");
-        this.clearForm();
 
-        this.$router.push({ name: "home" });
+        console.log(newRace);
+        
       } catch (error) {
         console.error("Error adding race:", error);
         alert("There was an error adding the race.");

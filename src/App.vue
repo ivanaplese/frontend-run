@@ -58,7 +58,7 @@
                   <router-link
                     to="/newraces"
                     class="dropdown-item"
-                    v-if="isAdmin"
+                    v-if="isLogedIn"
                   >
                     Dodaj novu utrku</router-link
                   >

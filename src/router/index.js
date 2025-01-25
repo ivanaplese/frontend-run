@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import AboutView from "../views/AboutView.vue";
 import LoginView from "../views/LoginView.vue";
@@ -11,8 +11,8 @@ import FavoritesView from "../views/FavoritesView.vue";
 
 const routes = [
     {
-        path: '/',
-        name: 'Home',
+        path: "/",
+        name: "Home",
         name: "home",
         component: HomeView,
         meta: { needsUser: false },
@@ -30,13 +30,13 @@ const routes = [
         meta: { needsUser: true },
     },
     {
-        path: '/login',
+        path: "/login",
         name: "login",
         component: LoginView,
         meta: { guestOnly: true },
     },
     {
-        path: '/signup',
+        path: "/signup",
         name: "signup",
         component: SignupView,
         meta: { guestOnly: true },
@@ -51,7 +51,7 @@ const routes = [
         path: "/newraces",
         name: "new-races",
         component: NewRace,
-        meta: { needsUser: true, adminOnly: true }, // Samo admini mogu pristupiti
+        meta: { needsUser: true }, // Samo admini mogu pristupiti
     },
     {
         path: "/uredi-utrku/:id",
@@ -62,7 +62,7 @@ const routes = [
     {
         path: "/:catchAll(.*)",
         redirect: "/",
-    }
+    },
 ];
 
 const router = createRouter({
@@ -71,7 +71,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-
     const isLoggedIn = store.currentUser !== null;
     const isAdmin = store.isAdmin;
 
@@ -85,6 +84,5 @@ router.beforeEach((to, from, next) => {
         next();
     }
 });
-
 
 export default router;
