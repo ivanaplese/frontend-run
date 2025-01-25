@@ -1,6 +1,6 @@
 <template>
   <div
-  class="login-container d-flex align-items-center justify-content-center min-vh-100"
+    class="login-container d-flex align-items-center justify-content-center min-vh-100"
   >
     <div class="login-content d-flex flex-row shadow-lg">
       <div class="welcome-section p-5 d-none d-md-block">
@@ -50,6 +50,7 @@
   </div>
 </template>
 
+
 <script>
 import store from "@/store";
 import api from "@/connection";
@@ -63,10 +64,10 @@ export default {
       errorMessage: "",
     };
   },
+
   methods: {
     async login() {
       try {
-       
         const authResponse = await api.post("/authAdmin", {
           email: this.email,
           password: this.password,
@@ -86,14 +87,13 @@ export default {
 
         const userData = await api.get(`/admin/email/${this.email}`);
         console.log(userData);
-
         // Store the user data (guest or admin
         store.currentUser = userData.data;
         console.log("podaci nakon prijave", store.currentUser);
         // Redirect the user to the home pa
         console.log("Login successful", authResponse.data.token);
         store.saveToken(authResponse.data.token);
-        
+
         this.$router.push("/");
       } catch (error) {
         // Handle different error cases
@@ -103,6 +103,7 @@ export default {
           this.errorMessage =
             "Krivo ste upisali email ili lozinku. Molimo pokušajte ponovno.";
         }
+
         console.error("Login error:", error);
       }
     },

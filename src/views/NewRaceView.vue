@@ -14,10 +14,9 @@
           <option value="Half Marathon">Half Marathon</option>
           <option value="Trail">Trail</option>
         </select>
+      </div>
 
-        </div>
-
-        <div>
+      <div>
         <label for="date">Date:</label>
         <input type="date" id="date" v-model="newRaceDate" required />
       </div>
@@ -32,40 +31,40 @@
         <textarea id="description" v-model="newRaceDescription"></textarea>
       </div>
 
-        
       <div>
         <label for="imageUrl">Race Image URL:</label>
         <input
           type="text"
           id="imageUrl"
           v-model="newRaceImage"
-          placeholder="Enter image URL" />
+          placeholder="Enter image URL"
+        />
       </div>
 
+      <button type="submit">Add New Race</button>
+    </form>
+  </div>
+</template>
 
-        <button type="submit">Add New Race</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  import { db, collection, addDoc } from "@/firebase.js";
-  import defaultImage from "@/assets/run.jpeg";
 
-  export default {
+<script>
+import { db, collection, addDoc } from "@/firebase.js";
+import defaultImage from "@/assets/run.jpeg";
+
+export default {
   name: "NewRace",
-    data() {
-      return {
-        newRaceName: "",
-        newRaceType: "",
-        newRaceDate: "",
-        newRaceLocation: "",
-        newRaceDescription: "",
-        newRaceImage: null,
-      };
-    },
+  data() {
+    return {
+      newRaceName: "",
+      newRaceType: "",
+      newRaceDate: "",
+      newRaceLocation: "",
+      newRaceDescription: "",
+      newRaceImage: null,
+    };
+  },
 
-    methods: {
+  methods: {
     async postNewRace() {
       if (!this.newRaceImage || this.newRaceImage.trim() === "") {
         this.newRaceImage = defaultImage;
@@ -87,8 +86,6 @@
         console.error("Error adding race:", error);
         alert("There was an error adding the race.");
       }
-
-      
     },
     clearForm() {
       this.newRaceName = "";
@@ -100,15 +97,14 @@
     },
   },
 };
+</script>
 
-  
-  </script>
-  <style scoped>
-  
-  .form-inline {
+
+<style scoped>
+.form-inline {
   display: flex;
   flex-direction: column;
-  }
+}
 
 .form-group {
   margin-bottom: 15px;
@@ -117,10 +113,9 @@
 label {
   display: block;
   margin-bottom: 5px;
-    font-weight: bold;
-
-  }
-  input[type="text"],
+  font-weight: bold;
+}
+input[type="text"],
 input[type="date"],
 textarea,
 select {
@@ -132,11 +127,10 @@ input[type="file"] {
   margin-top: 10px;
 }
 
-
 button {
   align-self: flex-start;
   padding: 10px 20px;
   font-size: 1rem;
   cursor: pointer;
-  }
-  </style>
+}
+</style>
