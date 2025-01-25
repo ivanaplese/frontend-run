@@ -100,12 +100,16 @@ export default {
     },
   },
   
+
   computed: {
     isLogedIn() {
+      console.log("Is loged in", store.currentUser);
+
       return store.state.token !== null;
     },
     currentUser() {
       console.log(store.currentUser);
+      console.log("Trenutni korisnik", store.currentUser);
       return store.currentUser; // Reactive binding
     },
 

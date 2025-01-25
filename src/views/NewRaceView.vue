@@ -1,35 +1,36 @@
 <template>
-    <div class="container">
-      <h1>Add New Race</h1>
-      <form @submit.prevent="postNewRace" class="form-inline mb-5">
-        <div class="form-group">
-          <label for="name">Race Name:</label>
-          <input type="text" id="name" v-model="newRaceName" required />
-        </div>
+  <div class="container">
+    <h1>Add New Race</h1>
+    <form @submit.prevent="postNewRace" class="form-inline mb-5">
+      <div class="form-group">
+        <label for="name">Race Name:</label>
+        <input type="text" id="name" v-model="newRaceName" required />
+      </div>
 
-        <div>
-          <label for="type">Race Type:</label>
-          <select id="type" v-model="newRaceType" required>
+      <div>
+        <label for="type">Race Type:</label>
+        <select id="type" v-model="newRaceType" required>
           <option value="Marathon">Marathon</option>
           <option value="Half Marathon">Half Marathon</option>
           <option value="Trail">Trail</option>
         </select>
+
         </div>
 
         <div>
-          <label for="date">Date:</label>
-          <input type="date" id="date" v-model="newRaceDate" required />
-        </div>
+        <label for="date">Date:</label>
+        <input type="date" id="date" v-model="newRaceDate" required />
+      </div>
 
-        <div>
-          <label for="location">Location:</label>
-          <input type="text" id="location" v-model="newRaceLocation" required />
-        </div>
+      <div>
+        <label for="location">Location:</label>
+        <input type="text" id="location" v-model="newRaceLocation" required />
+      </div>
 
-        <div>
-          <label for="description">Description:</label>
-          <textarea id="description" v-model="newRaceDescription"></textarea>
-        </div>
+      <div>
+        <label for="description">Description:</label>
+        <textarea id="description" v-model="newRaceDescription"></textarea>
+      </div>
 
         
       <div>

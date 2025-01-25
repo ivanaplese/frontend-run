@@ -73,8 +73,6 @@ export default {
         });
 
         // On successful login, save the token and user data
-        console.log("Login successful", authResponse.data.token);
-        store.saveToken(authResponse.data.token);
         if (!store.currentUser) {
           store.currentUser = {
             id: "",
@@ -85,15 +83,17 @@ export default {
             password: "",
           }; // Initialize the user object if it is null
         }
-        
+
         const userData = await api.get(`/admin/email/${this.email}`);
         console.log(userData);
 
-        // Store the user data (guest or admin)
-        Object.assign(store.currentUser, userData.data);
-
-        console.log(store.currentUser);
-        // Redirect the user to the home page
+        // Store the user data (guest or admin
+        store.currentUser = userData.data;
+        console.log("podaci nakon prijave", store.currentUser);
+        // Redirect the user to the home pa
+        console.log("Login successful", authResponse.data.token);
+        store.saveToken(authResponse.data.token);
+        
         this.$router.push("/");
       } catch (error) {
         // Handle different error cases
