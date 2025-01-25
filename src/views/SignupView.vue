@@ -140,6 +140,7 @@ export default {
           password: this.password,
           birthDate: this.birthDate,
         };
+        
         const response = await api.post("/admins", newUser);
         console.log("Registracija uspiješna");
         alert("Uspješna registracija. Molimo, prijavite se.");

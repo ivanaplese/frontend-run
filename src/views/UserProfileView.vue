@@ -2,8 +2,6 @@
   <div class="user-profile">
     <h2>User Profile</h2>
 
-          <!-- Input polja za email, ime, prezime i lozinke koriste v-model za dvosmjerno vezivanje podataka između polja i Vue instance. -->
-
     <div class="form-group">
       <label for="email">Email:</label>
       <input
@@ -15,10 +13,7 @@
       />
     </div>
 
-      <!-- Gumbi pokreću metode updateProfile (ažuriranje 
-       profila) i changePassword (promjena lozinke). -->
-
-       <div class="form-group">
+    <div class="form-group">
       <label for="displayName">Name and Surname:</label>
       <input
         type="text"
@@ -36,9 +31,10 @@
 
     <!-- Gumbi pokreću metode updateProfile (ažuriranje 
        profila) i changePassword (promjena lozinke). -->
-       <h2 class="mt-4">User Settings</h2>
 
-       <div class="form-group">
+    <h2 class="mt-4">User Settings</h2>
+
+    <div class="form-group">
       <label for="currentPassword">Current Password:</label>
       <input
         v-model="currentPassword"
@@ -57,6 +53,7 @@
         class="form-control"
       />
     </div>
+
     <div class="form-group">
       <label for="confirmPassword">Confirm New Password:</label>
       <input
@@ -66,13 +63,16 @@
         class="form-control"
       />
     </div>
+
     <button @click="changePassword" class="btn btn-primary">
       Change Password
     </button>
   </div>
 </template>
+
 <script>
 import { auth } from "@/firebase.js";
+
 import {
   onAuthStateChanged,
   updateProfile,
@@ -138,12 +138,11 @@ export default {
           alert("An error occurred. Please try again.");
         }
       }
-      },
-
+    },
   },
 };
+</script>
 
-  </script>
 <style scoped>
 .user-profile {
   max-width: 500px;
@@ -162,4 +161,4 @@ export default {
 .mt-4 {
   margin-top: 40px;
 }
-  </style>
+</style>
