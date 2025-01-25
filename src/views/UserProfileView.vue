@@ -23,14 +23,9 @@
       />
     </div>
 
-    <!-- Input polja za email, ime, prezime i lozinke koriste v-model za dvosmjerno vezivanje podataka između polja i Vue instance. -->
-
     <button @click="updateProfile" class="btn btn-primary">
       Update Profile
     </button>
-
-    <!-- Gumbi pokreću metode updateProfile (ažuriranje 
-       profila) i changePassword (promjena lozinke). -->
 
     <h2 class="mt-4">User Settings</h2>
 
@@ -72,42 +67,40 @@
 
 
 <script>
-import { auth } from "@/firebase.js";
-
-import {
-  onAuthStateChanged,
-  updateProfile,
-  reauthenticateWithCredential,
-  updatePassword,
-  EmailAuthProvider,
-} from "firebase/auth";
 import api from "@/connection";
 import store from "@/store";
+
 export default {
   data() {
     return {
-      email: "",
-      displayName: "",
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
     };
   },
-  created() {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        this.email = user.email;
-        this.displayName = user.displayName || "";
-      }
-    });
+  computed: {
+    email() {
+      return store.currentUser.email || "";
+    },
+    displayName: {
+      get() {
+        return store.currentUser.username || "";
+      },
+      set(newName) {
+        store.currentUser.username = newName;
+      },
+    },
   },
 
   methods: {
     async updateProfile() {
       try {
-        const user = auth.currentUser;
-        await updateProfile(user, {
-          displayName: this.displayName,
+        console.log(this.displayName);
+        console.log(this.email);
+        const changeResponse = await api.put("/admin", {
+          _id: store.currentUser._id,
+          email: this.email,
+          username: this.displayName,
         });
         alert("Profile successfully updated.");
       } catch (error) {
@@ -126,13 +119,13 @@ export default {
           email: store.currentUser.email,
           password: this.currentPassword,
         });
-        console.log(this.newPassword);
-        console.log(store.currentUser._id);
+
+
         const passChangeResponse = await api.put("/passAdmin", {
           _id: store.currentUser._id,
           password: this.newPassword,
         });
-        console.log("Lozinke su iste+token", authResponse.data.token);
+    console.log("Password changed successfully", passChangeResponse);
       } catch (error) {
         console.error("An error occurred while changing the password", error);
         if (error.code === "auth/wrong-password") {
