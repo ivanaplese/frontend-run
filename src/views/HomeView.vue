@@ -9,7 +9,8 @@
               v-model="searchQuery"
               type="text"
               class="form-control"
-              placeholder="Search by name, type, or location" />
+              placeholder="Search by name, type, or location"
+            />
           </div>
         </form>
       </div>
@@ -20,8 +21,9 @@
       <h4 class="mb-3">Marathons</h4>
       <div
         v-for="marathon in filteredMarathons.slice(0, 6)"
-    :key="marathon.id"     
-        class="col-md-4">
+        :key="marathon.id"
+        class="col-md-4"
+      >
         <!--  key se koristi za identifikaciju svakog elementa u petlji v for -->
         <div class="card">
           <img :src="marathon.image" class="card-img-top" alt="Race image" />
@@ -48,12 +50,14 @@
       <div
         v-for="halfMarathon in filteredHalfMarathons.slice(0, 6)"
         :key="halfMarathon.id"
-        class="col-md-4">
+        class="col-md-4"
+      >
         <div class="card">
           <img
             :src="halfMarathon.image"
             class="card-img-top"
-            alt="Race image" />
+            alt="Race image"
+          />
           <div class="card-body">
             <h5 class="card-title">
               <a href="#" @click.prevent="showDetails(halfMarathon)">{{
@@ -77,7 +81,8 @@
       <div
         v-for="trail in filteredTrails.slice(0, 6)"
         :key="trail.id"
-        class="col-md-4">
+        class="col-md-4"
+      >
         <div class="card">
           <img :src="trail.image" class="card-img-top" alt="Race image" />
           <div class="card-body">
@@ -101,7 +106,8 @@
         !filteredMarathons.length &&
         !filteredHalfMarathons.length &&
         !filteredTrails.length
-      ">
+      "
+    >
       <p class="text-center mt-5">Trenutno nema utrka.</p>
     </div>
 
@@ -112,7 +118,8 @@
       tabindex="-1"
       role="dialog"
       style="display: block"
-      @click.self="selectedRace = null">
+      @click.self="selectedRace = null"
+    >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -131,7 +138,8 @@
             <button
               type="button"
               class="btn btn-secondary"
-              @click="selectedRace = null">
+              @click="selectedRace = null"
+            >
               Close
             </button>
             <button
@@ -142,24 +150,26 @@
                 addedToFavorites
                   ? handleRemoveFromFavorites()
                   : handleAddToFavorites()
-              ">
+              "
+            >
               {{ addedToFavorites ? "Ukloni iz favorita" : "Dodaj u favorite" }}
             </button>
 
-
-<button
-  v-if="isAdmin"
-  type="button"
-  class="btn btn-warning"
-  @click="IdiNaUredivanje(selectedRace)">
-  Uredi utrku
-   </button>
+            <button
+              v-if="isAdmin"
+              type="button"
+              class="btn btn-warning"
+              @click="IdiNaUredivanje(selectedRace)"
+            >
+              Uredi utrku
+            </button>
 
             <button
               v-if="isAdmin"
               type="button"
               class="btn btn-danger"
-              @click="IzbrisiUtrku(selectedRace)">
+              @click="IzbrisiUtrku(selectedRace)"
+            >
               Izbriši utrku
             </button>
           </div>
@@ -172,7 +182,7 @@
 <script>
 import { db, collection, getDocs, addDoc, deleteDoc, doc } from "@/firebase.js";
 import store from "@/store";
-
+import api from "@/connection";
 export default {
   name: "HomeView",
   data() {
@@ -182,19 +192,18 @@ export default {
       selectedRace: null,
       currentUser: store.currentUser,
       addedToFavorites: false,
-      isAdmin: store.isAdmin,
     };
   },
   //racunate vrijednosti, computed sluzi za pisanje funkcija koje su za obradu ili filtriranje podataka
   computed: {
     marathons() {
-      return this.races.filter((race) => race.type === "Marathon");
+      return (this.races || []).filter((race) => race.type === "Marathon");
     },
     halfMarathons() {
-      return this.races.filter((race) => race.type === "Half Marathon");
+      return (this.races || []).filter((race) => race.type === "Half Marathon");
     },
     trails() {
-      return this.races.filter((race) => race.type === "Trail");
+      return (this.races || []).filter((race) => race.type === "Trail");
     },
     filteredMarathons() {
       return this.marathons.filter((race) => this.matchesSearch(race));
@@ -210,37 +219,34 @@ export default {
   mounted() {
     this.currentUser = store.currentUser;
     this.getPosts();
-    this.isAdmin = store.isAdmin;
   },
   //u metode idu sve funkcije koje bi mogli htjeti pozivati u indxu
   methods: {
     showDetails(race) {
       this.selectedRace = race;
-      this.checkIfFavorite(race);
+      this.checkIfFavorite(this.race);
     },
-
     async getPosts() {
       try {
-        const racesCollection = collection(db, "races");
-        const querySnapshot = await getDocs(racesCollection);
-        this.races = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          this.races.push({
-            id: doc.id,
-            name: data.name,
-            date: data.date,
-            location: data.location,
-            description: data.description,
-            type: data.type,
-            image: data.image || require("@/assets/run.jpeg"),
-          });
-        });
+        const response = await api.get("/race");
+        console.log(response);
+
+        // Mapiramo podatke iz API-ja u format koji koristi Vue aplikacija
+        this.races = response.data.map((race) => ({
+          id: race.id || race._id, // Koristimo `id` ili `_id` kao identifikator
+          name: race.naziv, // Mijenjamo `naziv` u `name`
+          type: race.vrsta, // Mijenjamo `vrsta` u `type`
+          location: race.lokacija || "Nepoznata lokacija", // Ako `lokacija` nedostaje
+          date: race.datum || "Nepoznat datum", // Ako `datum` nedostaje
+          description: race.opis || "Nema opisa", // Ako `opis` nedostaje
+          image: race.slika || "default-image.jpg", // Ako nema slike
+        }));
+
+        console.log("Ovo su dohvaćene utrke:", this.races);
       } catch (error) {
-        console.error("Error getting documents: ", error);
+        console.error("Greška prilikom dohvaćanja utrka: ", error);
       }
     },
-
     handleAddToFavorites() {
       if (this.currentUser && this.selectedRace) {
         this.addToFavorites(this.selectedRace);
@@ -348,13 +354,12 @@ export default {
       this.$router.push(`/uredi-utrku/${race.id}`);
     },
 
-  
     async IzbrisiUtrku(race) {
       try {
         await deleteDoc(doc(db, "races", race.id));
-        this.selectedRace = null; 
+        this.selectedRace = null;
         alert("Utrka je uspješno izbrisana.");
-        this.getPosts(); 
+        this.getPosts();
       } catch (error) {
         console.error("Greška prilikom brisanja utrke:", error);
       }
@@ -392,7 +397,7 @@ export default {
   margin: auto;
 }
 .card-title a {
-  color: rgb(255, 132, 0)!important;
+  color: rgb(255, 132, 0) !important;
   text-decoration: none;
   font-weight: bold;
 }
