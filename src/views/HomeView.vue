@@ -156,7 +156,6 @@
             </button>
 
             <button
-              v-if="isAdmin"
               type="button"
               class="btn btn-warning"
               @click="IdiNaUredivanje(selectedRace)"
@@ -165,7 +164,6 @@
             </button>
 
             <button
-              v-if="isAdmin"
               type="button"
               class="btn btn-danger"
               @click="IzbrisiUtrku(selectedRace)"
@@ -236,7 +234,7 @@ export default {
           id: race.id || race._id, // Koristimo `id` ili `_id` kao identifikator
           name: race.naziv, // Mijenjamo `naziv` u `name`
           type: race.vrsta, // Mijenjamo `vrsta` u `type`
-          location: race.lokacija || "Nepoznata lokacija", // Ako `lokacija` nedostaje
+          location: race.location || "Nepoznata lokacija", // Ako `lokacija` nedostaje
           date: race.datum || "Nepoznat datum", // Ako `datum` nedostaje
           description: race.opis || "Nema opisa", // Ako `opis` nedostaje
           image: race.slika || "default-image.jpg", // Ako nema slike
@@ -257,22 +255,22 @@ export default {
 
     async addToFavorites(race) {
       try {
-        const favoritesCollection = collection(
-          db,
-          "users",
-          this.currentUser,
-          "favorites"
-        );
-        const querySnapshot = await getDocs(favoritesCollection);
         let alreadyExists = false;
-        querySnapshot.forEach((doc) => {
-          if (doc.data().id === race.id) {
+
+        const favorites = await api.get("/favorit");
+        favorites.data.forEach((favorite) => {
+          if (
+            favorite.raceId === race.id &&
+            favorite.userId === store.currentUser._id
+          ) {
             alreadyExists = true;
           }
         });
         if (!alreadyExists) {
-          await addDoc(favoritesCollection, race);
-          this.addedToFavorites = true;
+          const addedToFavorite = await api.post("/favorit", {
+            raceId: race.id,
+            userId: store.currentUser._id,
+          });
           alert("Utrka je dodana u favorite!");
         } else {
           alert("Ova utrka je već u favoritima.");
@@ -356,8 +354,8 @@ export default {
 
     async IzbrisiUtrku(race) {
       try {
-        await deleteDoc(doc(db, "races", race.id));
-        this.selectedRace = null;
+        console.log(race.id);
+        await api.delete(`/race/${race.id}`);
         alert("Utrka je uspješno izbrisana.");
         this.getPosts();
       } catch (error) {
