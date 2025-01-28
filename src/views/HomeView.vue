@@ -222,7 +222,7 @@ export default {
   methods: {
     showDetails(race) {
       this.selectedRace = race;
-      this.checkIfFavorite(this.race);
+      this.checkIfFavorite(race);
     },
     async getPosts() {
       try {
@@ -291,54 +291,53 @@ export default {
 
     async removeFromFavorites(race) {
       try {
-        const favoritesCollection = collection(
-          db,
-          "users",
-          this.currentUser,
-          "favorites"
-        );
-        const querySnapshot = await getDocs(favoritesCollection);
-        querySnapshot.forEach(async (doc) => {
-          if (doc.data().id === race.id) {
-            try {
-              await deleteDoc(doc.ref);
-              this.addedToFavorites = false;
-              alert("Utrka je uklonjena iz favorita.");
-            } catch (error) {
-              console.error("Greška prilikom uklanjanja iz favorita:", error);
-            }
+        let alreadyExists = false;
+
+        const favorites = await api.get("/favorit");
+        favorites.data.forEach((favorite) => {
+          if (
+            favorite.raceId === race.id &&
+            favorite.userId === store.currentUser._id
+          ) {
+            alreadyExists = true;
+            console.log(favorite);
+            api.delete(`/favorit/${favorite._id}`);
           }
         });
       } catch (error) {
-        console.error("Greška prilikom dohvaćanja favorita:", error);
+        console.error("Greška prilikom dodavanja u favorite:", error);
       }
     },
 
     async checkIfFavorite(race) {
+      console.log(race);
       if (!this.currentUser) {
         this.addedToFavorites = false;
         return;
       }
 
-      try {
-        const favoritesCollection = collection(
-          db,
-          "users",
-          this.currentUser,
-          "favorites"
-        );
-        const querySnapshot = await getDocs(favoritesCollection);
+      if (!race || (!race.id && !race._id)) {
+        console.error("Proslijeđeni race objekt nije ispravan:", race);
         this.addedToFavorites = false;
-        querySnapshot.forEach((doc) => {
-          if (doc.data().id === race.id) {
-            this.addedToFavorites = true;
-          }
-        });
+        return;
+      }
+
+      try {
+        // Dohvati favorite iz API-ja
+        const response = await api.get("/favorit");
+
+        // Provjeri postoji li utrka među favoritima trenutnog korisnika
+        const isFavorite = response.data.some(
+          (favorite) =>
+            favorite.raceId === (race.id || race._id) &&
+            favorite.userId === this.currentUser._id
+        );
+
+        this.addedToFavorites = isFavorite;
       } catch (error) {
         console.error("Greška prilikom provjere favorita:", error);
       }
     },
-
     matchesSearch(race) {
       const query = this.searchQuery.toLowerCase();
       return (
