@@ -227,24 +227,26 @@ export default {
     async getPosts() {
       try {
         const response = await api.get("/race");
-        console.log(response);
 
-        // Mapiramo podatke iz API-ja u format koji koristi Vue aplikacija
         this.races = response.data.map((race) => ({
-          id: race.id || race._id, // Koristimo `id` ili `_id` kao identifikator
-          name: race.naziv, // Mijenjamo `naziv` u `name`
-          type: race.vrsta, // Mijenjamo `vrsta` u `type`
-          location: race.location || "Nepoznata lokacija", // Ako `lokacija` nedostaje
-          date: race.datum || "Nepoznat datum", // Ako `datum` nedostaje
-          description: race.opis || "Nema opisa", // Ako `opis` nedostaje
-          image: race.slika || "default-image.jpg", // Ako nema slike
+          id: race._id,
+          name: race.naziv,
+          type: race.vrsta,
+          location: race.location || "Nepoznata lokacija",
+          date: race.datum || "Nepoznat datum",
+          description: race.opis || "Nema opisa",
+          image: race.imageId
+            ? `http://localhost:3000/race/${race._id}/image`
+            : "default-image.jpg",
         }));
 
-        console.log("Ovo su dohvaćene utrke:", this.races);
+
       } catch (error) {
-        console.error("Greška prilikom dohvaćanja utrka: ", error);
+        console.error("Greška prilikom dohvaćanja utrka: ", error.message);
+        alert("Nije moguće dohvatiti utrke. Pokušajte ponovo kasnije.");
       }
     },
+    
     handleAddToFavorites() {
       if (this.currentUser && this.selectedRace) {
         this.addToFavorites(this.selectedRace);

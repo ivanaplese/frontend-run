@@ -34,10 +34,10 @@
       <div>
         <label for="imageUrl">Race Image URL:</label>
         <input
-          type="text"
-          id="imageUrl"
-          v-model="newRaceImage"
-          placeholder="Enter image URL"
+        type="file"
+          id="imageFile"
+          @change="handleFileUpload"
+          accept="image/*"
         />
       </div>
 
@@ -67,20 +67,33 @@ export default {
   },
 
   methods: {
+    handleFileUpload(event) {
+      this.newRaceImage = event.target.files[0]; // Sprema odabranu datoteku
+    },
     async postNewRace() {
-      if (!this.newRaceImage || this.newRaceImage.trim() === "") {
-        this.newRaceImage = defaultImage;
+      if (!this.newRaceImage) {
+        alert("Please upload an image.");
+        return;
       }
-      try {
-        const newRace = await api.post("/race", {
-          naziv: this.newRaceName,
-          vrsta: this.newRaceType,
-          datum: this.newRaceDate,
-          location: this.newRaceLocation,
-          opis: this.newRaceDescription,
-        });
+            // Kreiranje FormData objekta
+            const formData = new FormData();
+      formData.append("naziv", this.newRaceName);
+      formData.append("vrsta", this.newRaceType);
+      formData.append("datum", this.newRaceDate);
+      formData.append("location", this.newRaceLocation);
+      formData.append("opis", this.newRaceDescription);
+      formData.append("image", this.newRaceImage); // "image" ključ mora odgovarati backendu
 
-        console.log(newRace);
+      try {
+        const response = await api.post("/race", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data", // Važno za slanje FormData
+          },
+        });
+        
+        console.log("Race added successfully:", response.data);
+        alert("Race added successfully!");
+        this.clearForm();
         
       } catch (error) {
         console.error("Error adding race:", error);
