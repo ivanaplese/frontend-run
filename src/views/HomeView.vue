@@ -348,6 +348,7 @@ export default {
     },
 
     IdiNaUredivanje(race) {
+      console.log("Kliknuo si button");
       this.$router.push(`/uredi-utrku/${race.id}`);
     },
 

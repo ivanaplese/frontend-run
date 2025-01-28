@@ -1,106 +1,105 @@
 <template>
-    <v-app>
-      <v-container>
-        <h2 class="mb-4 pb-2 pb-md-0 mb-md-2 text-center">Uredi utrku</h2>
-        
-          <!-- Prikaz forme samo ako utrka ima ime, tj. podatke su učitani -->
-      <v-form v-if="race.name" @submit.prevent="UrediPodatke">
-        <v-row>
-            <v-col sm="6">
-              <input type="text" v-model="race.name" placeholder="Naziv utrke" />
-  
-              <input type="text" v-model="race.location" placeholder="Lokacija" />
+  <v-app>
+    <v-container>
+      <h2 class="mb-4 pb-2 pb-md-0 mb-md-2 text-center">Uredi utrku</h2>
 
-              <input type="date" v-model="race.date" placeholder="Datum utrke" />
-              
+      <!-- Prikaz forme samo ako utrka ima ime, tj. podatke su učitani -->
+      <v-form @submit.prevent="UrediPodatke">
+        <v-row>
+          <v-col sm="6">
+            <input type="text" v-model="race.naziv" placeholder="Naziv utrke" />
+
+            <input type="text" v-model="race.lokacija" placeholder="Lokacija" />
+
+            <input type="date" v-model="race.datum" placeholder="Datum utrke" />
+
             <select v-model="race.type">
               <option disabled value="">Odaberi vrstu utrke</option>
               <option>Marathon</option>
               <option>Half Marathon</option>
               <option>Trail</option>
-            </select> 
-            
+            </select>
+
             <!-- Dvostruka veza između unosa korisnika i podataka o utrci
             Svaka promjena u formi odmah ažurira odgovarajuće polje u objektu race. -->
 
-            
             <input
               type="text"
               v-model="race.description"
-              placeholder="Opis utrke" />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col sm="2">
-              <v-btn
-                @click="UrediPodatke"
-                class="d-flex justify-center align-center">
+              placeholder="Opis utrke"
+            />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col sm="2">
+            <v-btn
+              @click="UrediPodatke"
+              class="d-flex justify-center align-center"
+            >
               Submit
             </v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-container>
-    </v-app>
-  </template>
-  
-  <script>
+          </v-col>
+        </v-row>
+      </v-form>
+    </v-container>
+  </v-app>
+</template>
+
+<script>
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "@/firebase"; 
-
-  export default {
-    data() {
-      return {
-        race: {
-        name: "",
-        date: "",
+import { db } from "@/firebase";
+import api from "@/connection.js";
+import store from "@/store.js";
+export default {
+  data() {
+    return {
+      race: {
+        naziv: "",
+        datum: "",
         location: "",
-        description: "",
-        type: "",
+        opis: "",
+        vrsta: "",
       },
-      };
+    };
+  },
+  mounted() {
+    const raceId = this.$route.params.id; //dohvat ida utrke
+    this.fetchRace(raceId); // Poziv funkcije za dohvat podataka o utrci
+  },
+  methods: {
+    async fetchRace(id) {
+      try {
+        const raceDoc = await api.get(`/race/${id}`);
+        console.log(raceDoc.data);
+
+        this.race = raceDoc.data;
+        this.race.id = id;
+        console.log("This.race", this.race);
+      } catch (error) {
+        console.error("Error getting document:", error);
+      }
     },
-    mounted() {
-      const raceId = this.$route.params.id; //dohvat ida utrke
-      this.fetchRace(raceId);  // Poziv funkcije za dohvat podataka o utrci
-    },
-    methods: {
-      async fetchRace(id) {
-        try {
-          const raceDoc = await getDoc(doc(db, "races", id)); 
-        if (raceDoc.exists()) {
-          this.race = raceDoc.data(); 
-          this.race.id = id; 
-        } else {
-          console.log("No such document!");
-        }
-        } catch (error) {
-          console.error("Error getting document:", error);
-        }
-      },
-    
+
     async UrediPodatke() {
-
-        try {
-        await updateDoc(doc(db, "races", this.race.id), {
-          name: this.race.name,
-          location: this.race.location,
-          date: this.race.date,
-          description: this.race.description,
-          type: this.race.type,
+      try {
+        const result = await api.put("/race", {
+          _id: this.race.id,
+          naziv: this.race.naziv,
+          lokacija: this.race.lokacija,
+          datum: this.race.datum,
+          opis: this.race.opis,
+          vrsta: this.race.vrsta,
         });
-            alert("Utrka je uspješno uređena.");
+        alert("Utrka je uspješno uređena.");
 
-  
-        this.$router.push("/races"); 
+        this.$router.push("/races");
       } catch (error) {
         console.error("Greška prilikom ažuriranja utrke:", error);
       }
-      
-      },
     },
-  };
-  </script>
+  },
+};
+</script>
 <style scoped>
 .container {
   max-width: 800px;
@@ -117,7 +116,8 @@ h2 {
   margin-bottom: 20px;
 }
 
-input, select {
+input,
+select {
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
@@ -126,11 +126,15 @@ input, select {
   box-sizing: border-box;
 }
 
-input[type="text"], input[type="date"], textarea {
+input[type="text"],
+input[type="date"],
+textarea {
   background-color: #fff;
 }
 
-input[type="text"]:focus, input[type="date"]:focus, textarea:focus {
+input[type="text"]:focus,
+input[type="date"]:focus,
+textarea:focus {
   border-color: #f58634;
   outline: none;
 }

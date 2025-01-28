@@ -57,7 +57,7 @@ const routes = [
         path: "/uredi-utrku/:id",
         name: "uredi-utrku",
         component: UrediUtrku,
-        meta: { needsUser: true, adminOnly: true },
+        meta: { needsUser: true },
     },
     {
         path: "/:catchAll(.*)",
