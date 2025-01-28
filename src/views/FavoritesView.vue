@@ -34,6 +34,7 @@ export default {
         this.favorites = [];
         for (const race of racesIds.data) {
           try {
+            console.log("Race id", race.raceId);
             const raceDetails = await api.get(`/race/${race.raceId}`);
             console.log("Podaci iz foreach", raceDetails.data);
             this.favorites.push(raceDetails.data);

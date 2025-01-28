@@ -236,7 +236,7 @@ export default {
           date: race.datum || "Nepoznat datum",
           description: race.opis || "Nema opisa",
           image: race.imageId
-            ? `http://localhost:3000/race/${race._id}/image`
+            ? `http://localhost:3000/race/slika/${race._id}/image`
             : "default-image.jpg",
         }));
 
@@ -246,7 +246,7 @@ export default {
         alert("Nije moguće dohvatiti utrke. Pokušajte ponovo kasnije.");
       }
     },
-    
+
     handleAddToFavorites() {
       if (this.currentUser && this.selectedRace) {
         this.addToFavorites(this.selectedRace);
