@@ -67,21 +67,45 @@
     <button @click="changePassword" class="btn btn-primary">
       Change Password
     </button>
-    <h2 class="mt-4">My Races</h2>
 
-    <div v-if="races.length > 0">
-      <ul>
-        <li v-for="race in races" :key="race._id">
-          <strong>{{ race.naziv }}</strong> - {{ race.datum }}<br />
-          <span>Location: {{ race.location }}</span
-          ><br />
-          <span>Type: {{ race.vrsta }}</span
-          ><br />
-        </li>
-      </ul>
-    </div>
-    <div v-else>
-      <p>No races found for this user.</p>
+    <h2 class="mt-4">My Races</h2>
+    <div class="race-grid">
+      <div v-if="races.length > 0">
+        <div v-for="race in races" :key="race._id">
+          <div class="race-contanier">
+            <div class="card-body">
+              <img :src="race.image" class="card-img-top" alt="Race image" />
+              <h5 class="card-title">
+                <a>
+                  {{ race.naziv }}
+                </a>
+              </h5>
+              <p class="card-text">{{ race.tip }} - {{ race.lokacija }}</p>
+              <p class="card-text">
+                <small class="text-muted">{{ race.datum }}</small>
+              </p>
+              <button
+                type="button"
+                class="btn btn-warning"
+                @click="IdiNaUredivanje(race)"
+              >
+                Uredi utrku
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="IzbrisiUtrku(race)"
+              >
+                Izbriši utrku
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-else>
+        <p>No races found for this user.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -162,11 +186,39 @@ export default {
         const response = await api.get(
           `/races/creator/${store.currentUser._id}`
         );
-        this.races = response.data; // Store the races in the `races` array
+        const racesData = [];
+        for (const race of response.data) {
+          try {
+            // Ensure the correct property name is used (check _id instead of id)
+            race.image = race.imageId
+              ? `http://localhost:3000/race/slika/${race._id}/image`
+              : "default-image.jpg";
+
+            // Push the race object itself (not race.data unless the data is nested)
+            racesData.push(race);
+          } catch (error) {
+            console.error("Error while processing race data:", error);
+          }
+        }
+        this.races = racesData; // Store the races in the `races` array
       } catch (error) {
         console.error("Error fetching races by creator", error);
         alert("An error occurred while fetching races.");
       }
+    },
+    async IzbrisiUtrku(race) {
+      try {
+        console.log(race._id);
+        await api.delete(`/race/${race._id}`);
+        alert("Utrka je uspješno izbrisana.");
+        this.getPosts();
+      } catch (error) {
+        console.error("Greška prilikom brisanja utrke:", error);
+      }
+    },
+    IdiNaUredivanje(race) {
+      console.log("Kliknuo si button", race);
+      this.$router.push(`/uredi-utrku/${race._id}`);
     },
   },
 
@@ -178,19 +230,74 @@ export default {
 </script>
 
 <style scoped>
+.race-contanier {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.race-grid {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px; /* Adds spacing between cards */
+  justify-content: center; /* Centers the cards horizontally */
+}
+
+.card {
+  width: 1000%; /* Fixed width for all cards */
+  height: 100%; /* Ensures consistent card height */
+  max-wifth: 500px;
+  display: flex;
+  flex-direction: column; /* Vertical stacking of card content */
+}
+
+.card-img-top {
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-title a {
+  color: rgb(255, 132, 0) !important;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.card-title a:hover {
+  color: black !important;
+}
+
 .user-profile {
   max-width: 500px;
   margin: auto;
   padding: 20px;
 }
+
 .form-group {
   margin-bottom: 15px;
 }
+
 .btn {
   margin-top: 10px;
   background-color: #f58634;
   border-color: #f58634;
   color: white;
+}
+.btn-warning {
+  background-color: rgb(
+    245,
+    232,
+    52
+  ) !important; /* Yellow background for editing */
+  border-color: rgb(245, 232, 52) !important;
+}
+
+.btn-danger {
+  background-color: #d9534f !important; /* Red background for delete */
+  border-color: #d9534f !important;
 }
 .mt-4 {
   margin-top: 40px;
