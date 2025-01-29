@@ -250,7 +250,7 @@ export default {
 .card {
   width: 1000%; /* Fixed width for all cards */
   height: 100%; /* Ensures consistent card height */
-  max-wifth: 500px;
+  max-width: 500px;
   display: flex;
   flex-direction: column; /* Vertical stacking of card content */
 }
