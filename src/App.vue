@@ -12,7 +12,7 @@
           aria-controls="navbarNav"
           aria-expanded="false"
           aria-label="Toggle navigation"
-          >
+        >
           <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -100,7 +100,6 @@ export default {
       this.$router.push("/");
     },
   },
-  
 
   computed: {
     isLogedIn() {
@@ -109,11 +108,9 @@ export default {
       return store.state.token !== null;
     },
     currentUser() {
-      console.log(store.currentUser);
       console.log("Trenutni korisnik", store.currentUser);
       return store.currentUser; // Reactive binding
     },
-
   },
 };
 </script>

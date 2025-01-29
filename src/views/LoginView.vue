@@ -49,8 +49,6 @@
     </div>
   </div>
 </template>
-
-
 <script>
 import store from "@/store";
 import api from "@/connection";
@@ -64,7 +62,6 @@ export default {
       errorMessage: "",
     };
   },
-
   methods: {
     async login() {
       try {
@@ -85,7 +82,6 @@ export default {
             role: "",
           }; // Initialize the user object if it is null
         }
-
         const userData = await api.get(`/admin/email/${this.email}`);
         console.log(userData);
         // Store the user data (guest or admin
@@ -112,7 +108,7 @@ export default {
 };
 </script>
 
-
+/
 <style scoped>
 .login-container {
   background-color: #f8f9fa;

@@ -34,7 +34,7 @@
       <div>
         <label for="imageUrl">Race Image URL:</label>
         <input
-        type="file"
+          type="file"
           id="imageFile"
           @change="handleFileUpload"
           accept="image/*"
@@ -45,7 +45,6 @@
     </form>
   </div>
 </template>
-
 
 <script>
 import { db, collection, addDoc } from "@/firebase.js";
@@ -75,8 +74,9 @@ export default {
         alert("Please upload an image.");
         return;
       }
-            // Kreiranje FormData objekta
-            const formData = new FormData();
+
+      // Kreiranje FormData objekta
+      const formData = new FormData();
       formData.append("naziv", this.newRaceName);
       formData.append("vrsta", this.newRaceType);
       formData.append("datum", this.newRaceDate);
@@ -91,11 +91,10 @@ export default {
             "Content-Type": "multipart/form-data", // Važno za slanje FormData
           },
         });
-        
+
         console.log("Race added successfully:", response.data);
         alert("Race added successfully!");
         this.clearForm();
-        
       } catch (error) {
         console.error("Error adding race:", error);
         alert("There was an error adding the race.");
@@ -112,8 +111,6 @@ export default {
   },
 };
 </script>
-
-
 <style scoped>
 .form-inline {
   display: flex;

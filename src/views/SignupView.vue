@@ -1,6 +1,6 @@
 <template>
   <div
-  class="signup-container d-flex align-items-center justify-content-center min-vh-100"
+    class="signup-container d-flex align-items-center justify-content-center min-vh-100"
   >
     <div class="signup-content p-5 shadow-lg rounded">
       <h2 class="text-center mb-4">Create an Account</h2>
@@ -72,7 +72,7 @@
               placeholder="Enter your password"
               v-model="password"
               required
-              />
+            />
           </div>
           <div class="col-md-6 mb-3">
             <label for="inputConfirmPassword" class="form-label"
@@ -103,7 +103,6 @@
 </template>
 
 <script>
-
 import api from "@/connection.js";
 import axios from "axios";
 import { currentUser } from "@/store.js";
@@ -141,7 +140,6 @@ export default {
           password: this.password,
           birthDate: this.birthDate,
         };
-        
         const response = await api.post("/admins", newUser);
         console.log("Registracija uspiješna");
         alert("Uspješna registracija. Molimo, prijavite se.");
@@ -159,7 +157,6 @@ export default {
     },
   },
 };
-
 </script>
 <style scoped>
 .signup-container {
@@ -207,4 +204,3 @@ export default {
   text-decoration: underline;
 }
 </style>
-

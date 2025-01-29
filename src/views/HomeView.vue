@@ -143,7 +143,7 @@
               Close
             </button>
             <button
-            v-if="isLogedIn"
+              v-if="isLogedIn"
               type="button"
               class="btn btn-primary"
               @click="
@@ -180,7 +180,6 @@
 </template>
 
 <script>
-
 import store from "@/store";
 import api from "@/connection";
 export default {
@@ -198,6 +197,7 @@ export default {
   computed: {
     isLogedIn() {
       console.log("Is loged in", store.currentUser);
+
       return store.state.token !== null;
     },
 
@@ -238,7 +238,6 @@ export default {
     async getPosts() {
       try {
         const response = await api.get("/race");
-
         this.races = response.data.map((race) => ({
           id: race._id,
           name: race.naziv,
@@ -251,14 +250,11 @@ export default {
             ? `http://localhost:3000/race/slika/${race._id}/image`
             : "default-image.jpg",
         }));
-
-
       } catch (error) {
         console.error("Greška prilikom dohvaćanja utrka: ", error.message);
         alert("Nije moguće dohvatiti utrke. Pokušajte ponovo kasnije.");
       }
     },
-
     handleAddToFavorites() {
       if (this.currentUser && this.selectedRace) {
         this.addToFavorites(this.selectedRace);

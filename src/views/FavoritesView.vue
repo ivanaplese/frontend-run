@@ -54,11 +54,10 @@ export default {
             const raceDetails = await api.get(`/race/${race.raceId}`);
             console.log("Podaci iz foreach", raceDetails.data);
 
-                        // Add the image property to raceDetails.data
-                        raceDetails.data.image = raceDetails.data.imageId
+            // Add the image property to raceDetails.data
+            raceDetails.data.image = raceDetails.data.imageId
               ? `http://localhost:3000/race/slika/${raceDetails.data._id}/image`
               : "default-image.jpg";
-
 
             this.favorites.push(raceDetails.data);
           } catch (error) {
@@ -70,10 +69,10 @@ export default {
         console.error("Error fetching favorites:", error);
       }
     },
-
     async removeFromFavorites(race) {
       try {
         let alreadyExists = false;
+
         console.log("Gumb je pretisnut");
         const favorites = await api.get("/favorit");
         console.log("Favorites data", favorites.data);
@@ -95,7 +94,6 @@ export default {
         console.error("Greška prilikom dodavanja u favorite:", error);
       }
     },
-
   },
   async mounted() {
     await this.fetchFavorites();
@@ -112,18 +110,21 @@ export default {
   text-align: center;
   padding: 20px;
 }
+
 .favorites-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 16px; /* Adds spacing between cards */
   justify-content: center; /* Centers the cards horizontally */
 }
+
 .card {
   width: 300px; /* Fixed width for all cards */
   height: 100%; /* Ensures consistent card height */
   display: flex;
   flex-direction: column; /* Vertical stacking of card content */
 }
+
 .card-img-top {
   height: 180px;
   object-fit: cover;
