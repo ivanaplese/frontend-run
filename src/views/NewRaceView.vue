@@ -82,6 +82,7 @@ export default {
       formData.append("datum", this.newRaceDate);
       formData.append("location", this.newRaceLocation);
       formData.append("opis", this.newRaceDescription);
+      formData.append("creatorId", store.currentUser._id);
       formData.append("image", this.newRaceImage); // "image" ključ mora odgovarati backendu
 
       try {

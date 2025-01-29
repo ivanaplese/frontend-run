@@ -157,7 +157,7 @@
 
             <button
               type="button"
-                            v-if="isLogedIn"
+              v-if="isLogedIn && isCreator(selectedRace)"
               class="btn btn-warning"
               @click="IdiNaUredivanje(selectedRace)"
             >
@@ -166,7 +166,7 @@
 
             <button
               type="button"
-         v-if="isLogedIn"
+              v-if="isLogedIn && isCreator(selectedRace)"
               class="btn btn-danger"
               @click="IzbrisiUtrku(selectedRace)"
             >
@@ -200,6 +200,7 @@ export default {
       console.log("Is loged in", store.currentUser);
       return store.state.token !== null;
     },
+
     marathons() {
       return (this.races || []).filter((race) => race.type === "Marathon");
     },
@@ -230,6 +231,10 @@ export default {
       this.selectedRace = race;
       this.checkIfFavorite(race);
     },
+    isCreator(race) {
+      console.log(race);
+      return race.creatorId === store.currentUser._id;
+    },
     async getPosts() {
       try {
         const response = await api.get("/race");
@@ -241,6 +246,7 @@ export default {
           location: race.location || "Nepoznata lokacija",
           date: race.datum || "Nepoznat datum",
           description: race.opis || "Nema opisa",
+          creatorId: race.creatorId,
           image: race.imageId
             ? `http://localhost:3000/race/slika/${race._id}/image`
             : "default-image.jpg",
