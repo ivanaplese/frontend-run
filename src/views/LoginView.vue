@@ -82,6 +82,7 @@ export default {
             lastName: "",
             email: "",
             password: "",
+            role: "",
           }; // Initialize the user object if it is null
         }
 

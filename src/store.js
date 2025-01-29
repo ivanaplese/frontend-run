@@ -11,6 +11,7 @@ var currentUser = reactive({
     lastName: "",
     email: "",
     password: "",
+    role: "",
 });
 
 

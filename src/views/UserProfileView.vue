@@ -14,7 +14,7 @@
     </div>
 
     <div class="form-group">
-      <label for="displayName">Name and Surname:</label>
+      <label for="displayName">UserName</label>
       <input
         type="text"
         id="displayName"
@@ -26,6 +26,11 @@
     <button @click="updateProfile" class="btn btn-primary">
       Update Profile
     </button>
+
+    <div class="form-group">
+      <label for="role">Role:</label>
+      {{ role }}
+    </div>
 
     <h2 class="mt-4">User Settings</h2>
 
@@ -89,6 +94,11 @@ export default {
       set(newName) {
         store.currentUser.username = newName;
       },
+    },
+    
+    role() {
+      console.log(store.currentUser.role);
+      return store.currentUser.role || "N/A"; // Default to 'N/A' if role is undefined
     },
   },
 
