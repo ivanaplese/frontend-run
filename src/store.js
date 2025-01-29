@@ -28,11 +28,5 @@ export default {
         localStorage.removeItem("token");
         state.token = null; // Ovdje se također koristi reaktivni state
     },
-    checkAdmin() {
-        if (this.currentUser && this.currentUser.email === "plese@gmail.com") {
-            this.isAdmin = true;
-        } else {
-            this.isAdmin = false;
-        }
-    },
+
 };

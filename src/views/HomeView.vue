@@ -143,7 +143,7 @@
               Close
             </button>
             <button
-              v-if="currentUser"
+            v-if="isLogedIn"
               type="button"
               class="btn btn-primary"
               @click="
@@ -157,6 +157,7 @@
 
             <button
               type="button"
+                            v-if="isLogedIn"
               class="btn btn-warning"
               @click="IdiNaUredivanje(selectedRace)"
             >
@@ -165,6 +166,7 @@
 
             <button
               type="button"
+         v-if="isLogedIn"
               class="btn btn-danger"
               @click="IzbrisiUtrku(selectedRace)"
             >
@@ -178,7 +180,7 @@
 </template>
 
 <script>
-import { db, collection, getDocs, addDoc, deleteDoc, doc } from "@/firebase.js";
+
 import store from "@/store";
 import api from "@/connection";
 export default {
@@ -194,6 +196,10 @@ export default {
   },
   //racunate vrijednosti, computed sluzi za pisanje funkcija koje su za obradu ili filtriranje podataka
   computed: {
+    isLogedIn() {
+      console.log("Is loged in", store.currentUser);
+      return store.state.token !== null;
+    },
     marathons() {
       return (this.races || []).filter((race) => race.type === "Marathon");
     },
