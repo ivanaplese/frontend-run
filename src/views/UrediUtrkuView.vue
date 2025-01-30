@@ -80,6 +80,23 @@ export default {
       }
     },
 
+    // async UrediPodatke() {
+    //   try {
+    //     const result = await api.put("/race", {
+    //       _id: this.race.id,
+    //       naziv: this.race.naziv,
+    //       lokacija: this.race.lokacija,
+    //       datum: this.race.datum,
+    //       opis: this.race.opis,
+    //       vrsta: this.race.vrsta,
+    //     });
+    //     alert("Utrka je uspješno uređena.");
+
+    //     this.$router.push("/races");
+    //   } catch (error) {
+    //     console.error("Greška prilikom ažuriranja utrke:", error);
+    //   }
+    // },
     async UrediPodatke() {
       try {
         const result = await api.put("/race", {
@@ -88,15 +105,15 @@ export default {
           lokacija: this.race.lokacija,
           datum: this.race.datum,
           opis: this.race.opis,
-          vrsta: this.race.vrsta,
+          vrsta: this.race.type,
         });
         alert("Utrka je uspješno uređena.");
 
         this.$router.push("/races");
       } catch (error) {
         console.error("Greška prilikom ažuriranja utrke:", error);
-      }
-    },
+      }
+    },
   },
 };
 </script>
