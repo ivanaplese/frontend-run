@@ -101,6 +101,10 @@ export default {
     },
   },
 
+  handleBeforeUnload() {
+      store.clearToken(); // Clear token when the page is closed or refreshed
+    },
+
   computed: {
     isLogedIn() {
       console.log("Is loged in", store.currentUser);
@@ -111,6 +115,13 @@ export default {
       console.log("Trenutni korisnik", store.currentUser);
       return store.currentUser; // Reactive binding
     },
+  },
+  
+  mounted() {
+    window.addEventListener("beforeunload", this.handleBeforeUnload);
+  },
+  beforeUnmount() {
+    window.removeEventListener("beforeunload", this.handleBeforeUnload);
   },
 };
 </script>
