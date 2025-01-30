@@ -33,13 +33,13 @@ const routes = [
         path: "/login",
         name: "login",
         component: LoginView,
-        meta: { guestOnly: true },
+        meta: { needsUser: false },
     },
     {
         path: "/signup",
         name: "signup",
         component: SignupView,
-        meta: { guestOnly: true },
+        meta: { needsUser: false },
     },
     {
         path: "/profile",
