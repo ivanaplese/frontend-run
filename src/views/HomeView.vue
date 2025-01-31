@@ -247,8 +247,8 @@ export default {
           description: race.opis || "Nema opisa",
           creatorId: race.creatorId,
           image: race.imageId
-            ? `http://localhost:3000/race/slika/${race._id}/image`
-            : "default-image.jpg",
+    ? `${process.env.VUE_APP_API_URL}/race/slika/${race._id}/image`
+    : "default-image.jpg",
         }));
       } catch (error) {
         console.error("Greška prilikom dohvaćanja utrka: ", error.message);
