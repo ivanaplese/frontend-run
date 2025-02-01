@@ -120,7 +120,7 @@ export default {
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
-      races: [], // Initialize the races array here
+      races: [], 
     };
   },
   computed: {
@@ -136,7 +136,7 @@ export default {
       },
     },
     role() {
-      return store.currentUser.role || "N/A"; // Default to 'N/A' if role is undefined
+      return store.currentUser.role || "N/A"; 
     },
   },
   methods: {
@@ -182,25 +182,25 @@ export default {
 
     async fetchRacesByCreator() {
       try {
-        // Fetch races created by the current user
+       
         const response = await api.get(
           `/races/creator/${store.currentUser._id}`
         );
         const racesData = [];
         for (const race of response.data) {
           try {
-            // Ensure the correct property name is used (check _id instead of id)
+
             race.image = race.imageId
               ? `http://localhost:3000/race/slika/${race._id}/image`
               : "default-image.jpg";
 
-            // Push the race object itself (not race.data unless the data is nested)
+            
             racesData.push(race);
           } catch (error) {
             console.error("Error while processing race data:", error);
           }
         }
-        this.races = racesData; // Store the races in the `races` array
+        this.races = racesData; 
       } catch (error) {
         console.error("Error fetching races by creator", error);
         alert("An error occurred while fetching races.");
@@ -222,7 +222,7 @@ export default {
     },
   },
 
-  // Fetch races on component mount
+  
   mounted() {
     this.fetchRacesByCreator();
   },
@@ -243,16 +243,16 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 16px; /* Adds spacing between cards */
-  justify-content: center; /* Centers the cards horizontally */
+  gap: 16px; 
+  justify-content: center; 
 }
 
 .card {
-  width: 1000%; /* Fixed width for all cards */
-  height: 100%; /* Ensures consistent card height */
+  width: 1000%; 
+  height: 100%; 
   max-width: 500px;
   display: flex;
-  flex-direction: column; /* Vertical stacking of card content */
+  flex-direction: column; 
 }
 
 .card-img-top {
@@ -291,12 +291,12 @@ export default {
     245,
     232,
     52
-  ) !important; /* Yellow background for editing */
+  ) !important; 
   border-color: rgb(245, 232, 52) !important;
 }
 
 .btn-danger {
-  background-color: #d9534f !important; /* Red background for delete */
+  background-color: #d9534f !important; 
   border-color: #d9534f !important;
 }
 .mt-4 {

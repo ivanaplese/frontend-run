@@ -1,6 +1,5 @@
 import { reactive } from "vue";
 
-// Inicijalizacija state objekta kao reaktivnog
 const state = reactive({
     token: localStorage.getItem("token") || null,
 });
@@ -17,15 +16,15 @@ export default {
     searchTerm: "",
     isAdmin: false,
     currentUser,
-    state, // Izvozimo state koji je sada reaktivan
+    state,
     saveToken(token) {
         localStorage.setItem("token", token);
-        state.token = token; // Ovdje se koristi reaktivni state
+        state.token = token;
     },
 
-    // Funkcija za brisanje tokena
+
     clearToken() {
         localStorage.removeItem("token");
-        state.token = null; // Ovdje se također koristi reaktivni state
+        state.token = null;
     },
 };

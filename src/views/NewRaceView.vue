@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import { db, collection, addDoc } from "@/firebase.js";
 import defaultImage from "@/assets/run.jpeg";
 import api from "@/connection";
 import store from "@/store";
@@ -67,7 +66,6 @@ export default {
 
   methods: {
     handleFileUpload(event) {
-      this.newRaceImage = event.target.files[0]; // Sprema odabranu datoteku
     },
     async postNewRace() {
       if (!this.newRaceImage) {
@@ -75,7 +73,7 @@ export default {
         return;
       }
 
-      // Kreiranje FormData objekta
+      
       const formData = new FormData();
       formData.append("naziv", this.newRaceName);
       formData.append("vrsta", this.newRaceType);
@@ -83,12 +81,12 @@ export default {
       formData.append("location", this.newRaceLocation);
       formData.append("opis", this.newRaceDescription);
       formData.append("creatorId", store.currentUser._id);
-      formData.append("image", this.newRaceImage); // "image" ključ mora odgovarati backendu
+      formData.append("image", this.newRaceImage); 
 
       try {
         const response = await api.post("/race", formData, {
           headers: {
-            "Content-Type": "multipart/form-data", // Važno za slanje FormData
+            "Content-Type": "multipart/form-data", 
           },
         });
 

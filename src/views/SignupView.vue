@@ -16,7 +16,7 @@
               v-model="firstName"
               required
             />
-            <!-- Svaki ulazni element koristi v-model za dvosmjernu vezu između vrijednosti unosa i podataka u Vue instanci. -->
+           
           </div>
           <div class="col-md-6 mb-3">
             <label for="inputLastName" class="form-label">Last Name</label>
@@ -111,7 +111,7 @@ export default {
   name: "SignupView",
 
   data() {
-    //definira koje ce sve podatke komponenta koristit
+
     return {
       firstName: "",
       lastName: "",

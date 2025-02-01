@@ -70,7 +70,6 @@ export default {
           password: this.password,
         });
 
-        // On successful login, save the token and user data
         if (!store.currentUser) {
           store.currentUser = {
             id: "",
@@ -80,20 +79,17 @@ export default {
             email: "",
             password: "",
             role: "",
-          }; // Initialize the user object if it is null
+          }; 
         }
         const userData = await api.get(`/admin/email/${this.email}`);
         console.log(userData);
-        // Store the user data (guest or admin
         store.currentUser = userData.data;
         console.log("podaci nakon prijave", store.currentUser);
-        // Redirect the user to the home pa
         console.log("Login successful", authResponse.data.token);
         store.saveToken(authResponse.data.token);
 
         this.$router.push("/");
       } catch (error) {
-        // Handle different error cases
         if (error.message === "Email not found as guest or admin") {
           this.errorMessage = "Email nije pronađen kao gost ili administrator.";
         } else {

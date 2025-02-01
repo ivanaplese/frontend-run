@@ -24,7 +24,7 @@
         :key="marathon.id"
         class="col-md-4"
       >
-        <!--  key se koristi za identifikaciju svakog elementa u petlji v for -->
+
         <div class="card">
           <img :src="marathon.image" class="card-img-top" alt="Race image" />
           <div class="card-body">
@@ -193,7 +193,8 @@ export default {
       addedToFavorites: false,
     };
   },
-  //racunate vrijednosti, computed sluzi za pisanje funkcija koje su za obradu ili filtriranje podataka
+ 
+
   computed: {
     isLogedIn() {
       console.log("Is loged in", store.currentUser);
@@ -220,12 +221,12 @@ export default {
       return this.trails.filter((race) => this.matchesSearch(race));
     },
   },
-  //lifecycle hook, određuje kad točno će se nešto prikazati iz firestore na ekranu
+ 
   mounted() {
     this.currentUser = store.currentUser;
     this.getPosts();
   },
-  //u metode idu sve funkcije koje bi mogli htjeti pozivati u indxu
+ 
   methods: {
     showDetails(race) {
       this.selectedRace = race;
@@ -333,10 +334,9 @@ export default {
       }
 
       try {
-        // Dohvati favorite iz API-ja
+   
         const response = await api.get("/favorit");
 
-        // Provjeri postoji li utrka među favoritima trenutnog korisnika
         const isFavorite = response.data.some(
           (favorite) =>
             favorite.raceId === (race.id || race._id) &&

@@ -102,7 +102,7 @@ export default {
   },
 
   handleBeforeUnload() {
-      store.clearToken(); // Clear token when the page is closed or refreshed
+      store.clearToken(); 
     },
 
   computed: {
@@ -113,7 +113,7 @@ export default {
     },
     currentUser() {
       console.log("Trenutni korisnik", store.currentUser);
-      return store.currentUser; // Reactive binding
+      return store.currentUser; 
     },
   },
   
@@ -153,6 +153,3 @@ export default {
   }
 }
 </style>
-
-<!-- app vue sluzi za glavnu navigaciju aplikacijom, i autentifikaciju putem firebasea
-ima prilagdene rute ovisno u current user i glogbalno stanje store i integrirane rute -->

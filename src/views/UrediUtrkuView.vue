@@ -3,7 +3,7 @@
     <v-container>
       <h2 class="mb-4 pb-2 pb-md-0 mb-md-2 text-center">Uredi utrku</h2>
 
-      <!-- Prikaz forme samo ako utrka ima ime, tj. podatke su učitani -->
+
       <v-form @submit.prevent="UrediPodatke">
         <v-row>
           <v-col sm="6">
@@ -20,8 +20,7 @@
               <option>Trail</option>
             </select>
 
-            <!-- Dvostruka veza između unosa korisnika i podataka o utrci
-            Svaka promjena u formi odmah ažurira odgovarajuće polje u objektu race. -->
+
 
             <input
               type="text"
@@ -46,8 +45,7 @@
 </template>
 
 <script>
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "@/firebase";
+
 import api from "@/connection.js";
 import store from "@/store.js";
 export default {
@@ -63,8 +61,8 @@ export default {
     };
   },
   mounted() {
-    const raceId = this.$route.params.id; //dohvat ida utrke
-    this.fetchRace(raceId); // Poziv funkcije za dohvat podataka o utrci
+    const raceId = this.$route.params.id; 
+    this.fetchRace(raceId); 
   },
   methods: {
     async fetchRace(id) {
@@ -80,23 +78,7 @@ export default {
       }
     },
 
-    // async UrediPodatke() {
-    //   try {
-    //     const result = await api.put("/race", {
-    //       _id: this.race.id,
-    //       naziv: this.race.naziv,
-    //       lokacija: this.race.lokacija,
-    //       datum: this.race.datum,
-    //       opis: this.race.opis,
-    //       vrsta: this.race.vrsta,
-    //     });
-    //     alert("Utrka je uspješno uređena.");
 
-    //     this.$router.push("/races");
-    //   } catch (error) {
-    //     console.error("Greška prilikom ažuriranja utrke:", error);
-    //   }
-    // },
     async UrediPodatke() {
       try {
         const result = await api.put("/race", {

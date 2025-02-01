@@ -27,9 +27,6 @@
 </template>
 
 <script>
-import { auth } from "@/firebase.js";
-import { onAuthStateChanged } from "firebase/auth";
-import { db, collection, getDocs } from "@/firebase.js";
 import store from "@/store.js";
 import api from "@/connection.js";
 export default {
@@ -54,7 +51,7 @@ export default {
             const raceDetails = await api.get(`/race/${race.raceId}`);
             console.log("Podaci iz foreach", raceDetails.data);
 
-            // Add the image property to raceDetails.data
+            
             raceDetails.data.image = raceDetails.data.imageId
               ? `http://localhost:3000/race/slika/${raceDetails.data._id}/image`
               : "default-image.jpg";
@@ -114,15 +111,15 @@ export default {
 .favorites-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px; /* Adds spacing between cards */
-  justify-content: center; /* Centers the cards horizontally */
+  gap: 16px; 
+  justify-content: center; 
 }
 
 .card {
-  width: 300px; /* Fixed width for all cards */
-  height: 100%; /* Ensures consistent card height */
+  width: 300px; 
+  height: 100%; 
   display: flex;
-  flex-direction: column; /* Vertical stacking of card content */
+  flex-direction: column; 
 }
 
 .card-img-top {
