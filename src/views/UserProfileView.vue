@@ -191,8 +191,8 @@ export default {
           try {
 
             race.image = race.imageId
-              ? `http://localhost:3000/race/slika/${race._id}/image`
-              : "default-image.jpg";
+              ? `${process.env.VUE_APP_API_URL}/race/slika/${race._id}/image`
+              : "default-image.jpg",
 
             
             racesData.push(race);
