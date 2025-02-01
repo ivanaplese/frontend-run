@@ -52,10 +52,9 @@ export default {
             console.log("Podaci iz foreach", raceDetails.data);
 
             
-            raceDetails.data.image = raceDetails.data.imageId
-  ? `${process.env.VUE_APP_API_URL}/race/slika/${race.imageId}/image`
+              raceDetails.data.image = raceDetails.data.imageId
+  ? `${process.env.VUE_APP_API_URL}/race/slika/${raceDetails.data.imageId}/image`
   : "default-image.jpg";
-
 
             this.favorites.push(raceDetails.data);
           } catch (error) {
