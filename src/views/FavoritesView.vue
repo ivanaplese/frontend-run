@@ -53,9 +53,9 @@ export default {
 
             
             raceDetails.data.image = raceDetails.data.imageId
+  ? `${process.env.VUE_APP_API_URL}/race/slika/${race.imageId}/image`
+  : "default-image.jpg";
 
-              ? `${process.env.VUE_APP_API_URL}/race/slika/${race._id}/image`
-              : "default-image.jpg",
 
             this.favorites.push(raceDetails.data);
           } catch (error) {
