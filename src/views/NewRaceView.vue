@@ -66,6 +66,7 @@ export default {
 
   methods: {
     handleFileUpload(event) {
+      this.newRaceImage = event.target.files[0];
     },
     async postNewRace() {
       if (!this.newRaceImage) {
