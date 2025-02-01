@@ -53,8 +53,9 @@ export default {
 
             
             raceDetails.data.image = raceDetails.data.imageId
-              ? `http://localhost:3000/race/slika/${raceDetails.data._id}/image`
-              : "default-image.jpg";
+
+              ? `${process.env.VUE_APP_API_URL}/race/slika/${race._id}/image`
+              : "default-image.jpg",
 
             this.favorites.push(raceDetails.data);
           } catch (error) {
