@@ -6,7 +6,7 @@
       trkačkih događanja. Naša aplikacija je stvorena s ciljem da svim trkačima,
       bilo početnicima ili iskusnim maratoncima, pružimo jednostavan način za
       pregled nadolazećih utrka, planiranje trkačke sezone i povezivanje s
-      drugim ljubiteljima trčanja.
+      drugim ljubiteljima trčanja. Također, nova verzija aplikacije nudi mogućnost dodavanja utrka tako da svi organizatori imaju jednostavan način oglašavanja u točno određenoj publici koja im treba.
     </p>
 
     <h2>Naša Misija</h2>
